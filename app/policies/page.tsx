@@ -6,7 +6,7 @@ import { SAMPLE_POLICY_PDF, SAMPLE_RA_PDF } from '@/app/lib/samples';
 export default function PoliciesPage() {
   const [selectedSector, setSelectedSector] = useState('All');
   const [activeTab, setActiveTab] = useState('bundles');
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<any[]>([]);
 
   const sectors = ['All', ...new Set(POLICIES.map(p => p.sector))];
 
@@ -18,11 +18,11 @@ export default function PoliciesPage() {
     ? RISK_ASSESSMENTS
     : RISK_ASSESSMENTS.filter(ra => ra.sector === selectedSector);
 
-  const addToCart = (item) => {
+  const addToCart = (item: any) => {
     setCart([...cart, { ...item, cartId: Math.random() }]);
   };
 
-  const removeFromCart = (cartId) => {
+  const removeFromCart = (cartId: number) => {
     setCart(cart.filter(item => item.cartId !== cartId));
   };
 
@@ -240,7 +240,7 @@ export default function PoliciesPage() {
           ) : (
             <>
               <div style={{ maxHeight: '400px', overflowY: 'auto', marginBottom: '1.5rem' }}>
-                {cart.map((item, idx) => (
+                {cart.map((item) => (
                   <div key={item.cartId} style={{ backgroundColor: 'white', padding: '1rem', marginBottom: '0.75rem', borderRadius: '4px', fontSize: '0.875rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                       <span style={{ fontWeight: '600', color: '#0B1D3A' }}>{item.name}</span>
