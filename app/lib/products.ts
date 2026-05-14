@@ -10,6 +10,7 @@ export interface Product {
   category: 'policy' | 'risk-assessment' | 'bundle';
   sector: string;
   description: string;
+  savings?: string;
 }
 
 export const POLICIES: Product[] = [
@@ -153,7 +154,8 @@ export const BUNDLES: Product[] = [
     price: 199.99,
     category: 'bundle',
     sector: 'Care Homes',
-    description: '5 essential policies + 3 key risk assessments for care homes. Total value: £370+. Save £170+.'
+    description: '5 essential policies + 3 key risk assessments for care homes. Total value: £370+. Save £170+.',
+    savings: 'Save £170+'
   },
   {
     id: 'b-dp-01',
@@ -161,7 +163,8 @@ export const BUNDLES: Product[] = [
     price: 299.99,
     category: 'bundle',
     sector: 'Dental Practices',
-    description: '8 policies + 5 risk assessments for dental practices. Total value: £500+. Save £200+.'
+    description: '8 policies + 5 risk assessments for dental practices. Total value: £500+. Save £200+.',
+    savings: 'Save £200+'
   },
   {
     id: 'b-ac-01',
@@ -169,7 +172,8 @@ export const BUNDLES: Product[] = [
     price: 349.99,
     category: 'bundle',
     sector: 'Aesthetic Clinics',
-    description: '10 policies + 10 risk assessments for aesthetic clinics. Total value: £630+. Save £280+.'
+    description: '10 policies + 10 risk assessments for aesthetic clinics. Total value: £630+. Save £280+.',
+    savings: 'Save £280+'
   },
   {
     id: 'b-all-01',
@@ -177,6 +181,7 @@ export const BUNDLES: Product[] = [
     price: 699.99,
     category: 'bundle',
     sector: 'All Sectors',
-    description: 'ALL 70+ policies + ALL 60+ risk assessments across all 6 healthcare sectors. Total value: £1700+. Save £1000+.'
+    description: 'ALL 70+ policies + ALL 60+ risk assessments across all 6 healthcare sectors. Total value: £1700+. Save £1000+.',
+    savings: 'Save £1000+'
   },
 ];
