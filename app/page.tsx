@@ -37,7 +37,7 @@ export default function Home() {
           
           <h1 style={{ fontSize: '4rem', fontWeight: '700', lineHeight: '1.2', marginBottom: '1.5rem' }}>
             Professional CQC Compliance<br />
-            <span style={{ color: '#D4AF37' }}>Templates at Premium Quality</span>
+            <span style={{ color: '#D4AF37' }}>Professional CQC & HSE Templates</span>
           </h1>
           
           <p style={{ fontSize: '1.125rem', lineHeight: '1.7', color: '#d1d5db', marginBottom: '3rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
