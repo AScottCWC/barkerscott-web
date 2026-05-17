@@ -5,10 +5,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId } = await request.json();
+    const body = await request.json();
+    const { sessionId } = body;
 
     if (!sessionId) {
-      return NextResponse.json({ error: 'No session ID provided' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing session ID' },
+        { status: 400 }
+      );
     }
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
@@ -16,7 +20,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       id: session.id,
       payment_status: session.payment_status,
+      customer_email: session.customer_email,
       metadata: session.metadata,
+      line_items: session.line_items,
     });
   } catch (error: any) {
     console.error('Session retrieval error:', error);
