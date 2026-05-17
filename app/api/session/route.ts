@@ -1,3 +1,6 @@
+// FILE: app/api/session/route.ts
+// Replace your entire file with this code
+
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -30,6 +33,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       metadata: session.metadata,
+      customer_email: session.customer_email || session.customer_details?.email,
+      customer_details: session.customer_details,
     });
   } catch (error: any) {
     console.error('Session error:', error);
