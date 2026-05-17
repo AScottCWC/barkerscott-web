@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
-
 export async function POST(request: NextRequest) {
   try {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    
+    if (!secretKey) {
+      return NextResponse.json(
+        { error: 'Server configuration error' },
+        { status: 500 }
+      );
+    }
+
+    const stripe = new Stripe(secretKey);
     const body = await request.json();
     const { sessionId } = body;
 
@@ -22,12 +30,11 @@ export async function POST(request: NextRequest) {
       payment_status: session.payment_status,
       customer_email: session.customer_email,
       metadata: session.metadata,
-      line_items: session.line_items,
     });
   } catch (error: any) {
-    console.error('Session retrieval error:', error);
+    console.error('Session error:', error.message);
     return NextResponse.json(
-      { error: error.message || 'Failed to retrieve session' },
+      { error: 'Failed to retrieve session' },
       { status: 500 }
     );
   }
