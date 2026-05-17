@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
 
 export async function POST(request: NextRequest) {
   try {
     const secretKey = process.env.STRIPE_SECRET_KEY;
     
     if (!secretKey) {
+      console.error('STRIPE_SECRET_KEY not set');
       return NextResponse.json(
-        { error: 'Server configuration error' },
+        { error: 'Missing API configuration' },
         { status: 500 }
       );
     }
 
+    // Import Stripe here, not at the top
+    const { default: Stripe } = await import('stripe');
     const stripe = new Stripe(secretKey);
+    
     const body = await request.json();
     const { sessionId } = body;
 
@@ -26,13 +29,10 @@ export async function POST(request: NextRequest) {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     return NextResponse.json({
-      id: session.id,
-      payment_status: session.payment_status,
-      customer_email: session.customer_email,
       metadata: session.metadata,
     });
   } catch (error: any) {
-    console.error('Session error:', error.message);
+    console.error('Session error:', error);
     return NextResponse.json(
       { error: 'Failed to retrieve session' },
       { status: 500 }
