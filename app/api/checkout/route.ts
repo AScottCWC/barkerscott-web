@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
-
 export async function POST(request: NextRequest) {
   try {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    
+    if (!secretKey) {
+      console.error('STRIPE_SECRET_KEY environment variable is not set');
+      return NextResponse.json(
+        { error: 'Server configuration error: Missing STRIPE_SECRET_KEY' },
+        { status: 500 }
+      );
+    }
+
+    const stripe = new Stripe(secretKey);
     const body = await request.json();
     const { cartItems } = body;
 
@@ -39,7 +48,7 @@ export async function POST(request: NextRequest) {
       url: session.url
     });
   } catch (error: any) {
-    console.error('Stripe error:', error);
+    console.error('Stripe error:', error.message);
     return NextResponse.json(
       { error: error.message || 'Checkout failed' },
       { status: 500 }
