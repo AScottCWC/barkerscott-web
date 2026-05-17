@@ -15,30 +15,47 @@ export default function SuccessPage() {
   const sessionId = searchParams.get('session_id');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('Success page loaded, sessionId:', sessionId);
+
     const fetchSessionData = async () => {
       if (!sessionId) {
+        console.log('No sessionId found');
         setLoading(false);
         return;
       }
 
       try {
+        console.log('Fetching session data...');
         const response = await fetch('/api/session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ sessionId }),
         });
 
+        console.log('Session API response status:', response.status);
+        
         if (response.ok) {
           const data = await response.json();
+          console.log('Session data:', data);
+          
           if (data.metadata?.cartItems) {
             const items = JSON.parse(data.metadata.cartItems);
+            console.log('Parsed cart items:', items);
             setCartItems(items);
+          } else {
+            console.log('No cartItems in metadata');
           }
+        } else {
+          const errorData = await response.json();
+          console.error('Session API error:', errorData);
+          setError('Failed to fetch session: ' + errorData.error);
         }
       } catch (err) {
         console.error('Error fetching session:', err);
+        setError('Error: ' + (err instanceof Error ? err.message : String(err)));
       } finally {
         setLoading(false);
       }
@@ -48,10 +65,12 @@ export default function SuccessPage() {
   }, [sessionId]);
 
   const handleDownload = (item: CartItem) => {
-    // Simple download - just open the file path
+    console.log('Download clicked for:', item.id);
     const folderName = item.category === 'policy' ? 'policies' : 'risk-assessments';
     const fileName = item.name.toLowerCase().replace(/\s+/g, '-') + '.docx';
     const filePath = `/downloads/${folderName}/${fileName}`;
+    
+    console.log('Downloading from:', filePath);
     
     const link = document.createElement('a');
     link.href = filePath;
@@ -75,11 +94,18 @@ export default function SuccessPage() {
         <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginBottom: '2rem', textAlign: 'center' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: '700', color: '#0B1D3A', marginBottom: '1rem' }}>✅ Payment Successful!</h1>
           <p style={{ color: '#6b7280', marginBottom: '1rem' }}>Thank you for your purchase.</p>
+          <p style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Session: {sessionId}</p>
         </div>
 
-        {cartItems.length > 0 && (
+        {error && (
+          <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fca5a5', color: '#dc2626', padding: '1rem', borderRadius: '8px', marginBottom: '2rem' }}>
+            <strong>Error:</strong> {error}
+          </div>
+        )}
+
+        {cartItems.length > 0 ? (
           <div style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0B1D3A', marginBottom: '1.5rem' }}>📋 Your Documents</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0B1D3A', marginBottom: '1.5rem' }}>📋 Your Documents ({cartItems.length} items)</h2>
             
             <div style={{ marginBottom: '1.5rem' }}>
               {cartItems.map((item) => (
@@ -118,6 +144,10 @@ export default function SuccessPage() {
                 </div>
               ))}
             </div>
+          </div>
+        ) : (
+          <div style={{ backgroundColor: '#fef3c7', border: '1px solid #fcd34d', color: '#92400e', padding: '1rem', borderRadius: '8px', marginBottom: '2rem' }}>
+            <p><strong>No items found</strong> - Session data may still be loading or cart was empty.</p>
           </div>
         )}
 
