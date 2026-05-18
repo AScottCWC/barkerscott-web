@@ -50,9 +50,9 @@ const bundleData = {
 };
 
 export default function BundlesPage() {
-  const [selectedBundle, setSelectedBundle] = useState(null);
+  const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
 
-  const bundle = selectedBundle ? bundleData[selectedBundle] : null;
+  const bundle = selectedBundle && selectedBundle in bundleData ? bundleData[selectedBundle as keyof typeof bundleData] : null;
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px', fontFamily: 'Arial, sans-serif' }}>
