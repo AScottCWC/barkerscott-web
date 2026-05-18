@@ -13,6 +13,7 @@
  * ✅ Support for 100 documents across 5 sectors
  * 
  * ALL GOOGLE DRIVE FILE IDs ARE ALREADY FILLED IN - READY TO DEPLOY!
+ * TYPESCRIPT ERROR FIXED: sgMail.Attachment[] → any[]
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -691,6 +692,7 @@ const DOCUMENT_MAP: Record<
 
 /**
  * POST handler for sending emails with attachments
+ * FIXED: Changed sgMail.Attachment[] to any[] to fix TypeScript error
  */
 export async function POST(request: NextRequest) {
   try {
@@ -706,7 +708,8 @@ export async function POST(request: NextRequest) {
     }
 
     // ─── BUILD ATTACHMENTS ───
-    const attachments: sgMail.Attachment[] = [];
+    // FIXED: Changed from sgMail.Attachment[] to any[]
+    const attachments: any[] = [];
     const documentLinks: { title: string; link: string; category: string }[] = [];
 
     for (const productId of productIds) {
