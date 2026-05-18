@@ -1,3 +1,6 @@
+bash
+
+cat > /tmp/barkerscott-web/app/success/page.tsx << 'EOF'
 'use client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
@@ -7,6 +10,7 @@ function SuccessContent() {
   const sessionId = searchParams.get('session_id');
   const [loading, setLoading] = useState(true);
   const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!sessionId) {
@@ -16,6 +20,8 @@ function SuccessContent() {
 
     const sendEmail = async () => {
       try {
+        console.log('Starting email send process for session:', sessionId);
+        
         // First get the session data to get customer email and items
         const sessionResponse = await fetch('/api/session', {
           method: 'POST',
@@ -23,15 +29,21 @@ function SuccessContent() {
           body: JSON.stringify({ sessionId }),
         });
 
+        console.log('Session response status:', sessionResponse.status);
+
         if (sessionResponse.ok) {
           const sessionData = await sessionResponse.json();
+          console.log('Session data received:', sessionData);
           
           if (sessionData.metadata?.cartItems) {
             const items = JSON.parse(sessionData.metadata.cartItems);
             const customerEmail = sessionData.customer_email;
 
+            console.log('Sending email to:', customerEmail);
+            console.log('Items:', items);
+
             // Send email with purchase details
-            await fetch('/api/send-email', {
+            const emailResponse = await fetch('/api/send-email', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -41,11 +53,28 @@ function SuccessContent() {
               }),
             });
 
-            setEmailSent(true);
+            console.log('Email API response status:', emailResponse.status);
+            const emailData = await emailResponse.json();
+            console.log('Email API response:', emailData);
+
+            if (emailResponse.ok) {
+              console.log('Email sent successfully!');
+              setEmailSent(true);
+            } else {
+              console.error('Email API returned error:', emailData);
+              setError(true);
+            }
+          } else {
+            console.error('No cartItems in metadata');
+            setError(true);
           }
+        } else {
+          console.error('Session API failed:', sessionResponse.status);
+          setError(true);
         }
       } catch (err) {
-        console.error('Error:', err);
+        console.error('Error during email send:', err);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -68,6 +97,15 @@ function SuccessContent() {
         {loading ? (
           <div style={{ color: '#6b7280' }}>
             <p>Processing your order...</p>
+          </div>
+        ) : error ? (
+          <div style={{ backgroundColor: '#fee2e2', border: '1px solid #fca5a5', borderRadius: '8px', padding: '1.5rem', marginBottom: '2rem' }}>
+            <p style={{ color: '#991b1b', fontWeight: '600', margin: 0 }}>
+              ⚠️ Error sending email
+            </p>
+            <p style={{ color: '#7f1d1d', fontSize: '0.9375rem', margin: '0.5rem 0 0 0' }}>
+              We received your payment but encountered an issue sending the confirmation email. Please contact support.
+            </p>
           </div>
         ) : emailSent ? (
           <div style={{ backgroundColor: '#ecfdf5', border: '1px solid #86efac', borderRadius: '8px', padding: '1.5rem', marginBottom: '2rem' }}>
@@ -114,3 +152,7 @@ export default function SuccessPage() {
     </Suspense>
   );
 }
+EOF
+Output
+
+exit code 0
