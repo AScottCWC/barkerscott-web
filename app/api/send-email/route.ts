@@ -18,10 +18,14 @@ export async function POST(request: NextRequest) {
     const itemsHtml = items?.map((item: any) => {
       const fileMap: any = {
         "Safeguarding Adults Policy": "/downloads/policies/care-home/safeguarding-adults-policy.docx.docx",
+        "Infection Control Policy": "/downloads/policies/care-home/infection-prevention-control-policy.docx.docx",
         "Health & Safety Policy": "/downloads/policies/care-home/health-safety-policy.docx.docx",
-        "GDPR Policy": "/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
-        "Risk Assessment Template": "/downloads/risk-assessments/risk-assessment-template.docx.docx",
-        "Incident Report Form": "/downloads/risk-assessments/incident-report-form.docx.docx",
+        "Data Protection Policy": "/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
+        "Safeguarding Policy": "/downloads/policies/dental/safeguarding-children-vulnerable-adults-policy.docx.docx",
+        "Privacy & Data Protection Policy": "/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
+        "Client Safeguarding Policy": "/downloads/policies/care-home/safeguarding-adults-policy.docx.docx",
+        "Safeguarding Risk Assessment": "/downloads/risk-assessments/risk-assessment-template.docx.docx",
+        "Client Safeguarding Risk Assessment": "/downloads/risk-assessments/risk-assessment-template.docx.docx",
       };
       const filename = fileMap[item.name] || "";
       const downloadLink = filename ? `<p style="margin: 10px 0;"><a href="https://barkerscott-web.vercel.app${filename}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px;">📥 Download Template</a></p>` : "";
