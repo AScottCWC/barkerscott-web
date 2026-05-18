@@ -1,6 +1,3 @@
-bash
-
-cat > /tmp/barkerscott-web/app/success/page.tsx << 'EOF'
 'use client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
@@ -22,7 +19,6 @@ function SuccessContent() {
       try {
         console.log('Starting email send process for session:', sessionId);
         
-        // First get the session data to get customer email and items
         const sessionResponse = await fetch('/api/session', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -40,9 +36,7 @@ function SuccessContent() {
             const customerEmail = sessionData.customer_email;
 
             console.log('Sending email to:', customerEmail);
-            console.log('Items:', items);
 
-            // Send email with purchase details
             const emailResponse = await fetch('/api/send-email', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -104,7 +98,7 @@ function SuccessContent() {
               ⚠️ Error sending email
             </p>
             <p style={{ color: '#7f1d1d', fontSize: '0.9375rem', margin: '0.5rem 0 0 0' }}>
-              We received your payment but encountered an issue sending the confirmation email. Please contact support.
+              We received your payment but encountered an issue. Please contact support.
             </p>
           </div>
         ) : emailSent ? (
@@ -113,7 +107,7 @@ function SuccessContent() {
               📧 Confirmation Email Sent
             </p>
             <p style={{ color: '#6b7280', fontSize: '0.9375rem', margin: '0.5rem 0 0 0' }}>
-              Check your email inbox for your purchase confirmation and documents.
+              Check your email inbox for your purchase confirmation.
             </p>
           </div>
         ) : (
@@ -152,7 +146,3 @@ export default function SuccessPage() {
     </Suspense>
   );
 }
-EOF
-Output
-
-exit code 0
