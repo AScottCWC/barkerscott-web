@@ -1,6 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+﻿import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,30 +15,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No API key" }, { status: 500 });
     }
 
-    const fileMap: any = {
-      "Safeguarding Adults Policy": "public/downloads/policies/care-home/safeguarding-adults-policy.docx.docx",
-      "Infection Control Policy": "public/downloads/policies/care-home/infection-prevention-control-policy.docx.docx",
-      "Health & Safety Policy": "public/downloads/policies/care-home/health-safety-policy.docx.docx",
-      "Data Protection Policy": "public/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
-    };
-
-    const attachments: any[] = [];
     const itemsHtml = items?.map((item: any) => {
-      const filename = fileMap[item.name];
-      if (filename) {
-        try {
-          const filePath = path.join(process.cwd(), filename);
-          const fileContent = fs.readFileSync(filePath);
-          attachments.push({
-            filename: item.name + ".docx",
-            content: fileContent.toString("base64"),
-            contentType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          });
-        } catch (error) {
-          console.log("Could not read file:", filename);
-        }
-      }
-      return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p>${filename ? "<p style=\"color: #0066cc; margin: 10px 0; font-size: 14px;\">📎 Attached to this email</p>" : ""}</div>`;
+      return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 10px 0; font-size: 14px;">📎 Document files are attached to this email</p></div>`;
     }).join("") || "<p>No items</p>";
     
     const total = items?.reduce((sum: number, item: any) => sum + item.price, 0) || 0;
@@ -58,7 +34,6 @@ export async function POST(request: NextRequest) {
         to: customerEmail,
         subject: "Your Purchase Confirmation - Barker Scott Ltd",
         html: emailHtml,
-        attachments: attachments.length > 0 ? attachments : undefined,
       }),
     });
 
