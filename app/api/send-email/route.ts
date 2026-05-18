@@ -16,10 +16,17 @@ export async function POST(request: NextRequest) {
     }
 
     const fileMap: any = {
-      "Safeguarding Adults Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/safeguarding-adults-policy.docx.docx",
-      "Infection Control Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/infection-prevention-control-policy.docx.docx",
-      "Health & Safety Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/health-safety-policy.docx.docx",
-      "Data Protection Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
+      "Safeguarding Adults Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/safeguarding-adults-policy.docx",
+      "Infection Control Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/infection-prevention-control-policy.docx",
+      "Health & Safety Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/health-safety-policy.docx",
+      "Data Protection Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/data-protection-confidentiality-policy.docx",
+    };
+
+    const bundleLinks: any = {
+      "Care Home Starter": "https://barkerscott-web.vercel.app/downloads/bundles/care-home-starter.zip",
+      "Dental Pro": "https://barkerscott-web.vercel.app/downloads/bundles/dental-pro.zip",
+      "Aesthetic Complete": "https://barkerscott-web.vercel.app/downloads/bundles/aesthetic-complete.zip",
+      "Ultimate Package": "https://barkerscott-web.vercel.app/downloads/bundles/ultimate-package.zip",
     };
 
     const bundleInfo: any = {
@@ -31,10 +38,11 @@ export async function POST(request: NextRequest) {
 
     const itemsHtml = items?.map((item: any) => {
       const downloadUrl = fileMap[item.name];
+      const bundleLink = bundleLinks[item.name];
       const bundleDescription = bundleInfo[item.name];
       
-      if (bundleDescription) {
-        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">📦 ${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 8px 0; font-size: 13px;">${bundleDescription}</p><p style="margin: 10px 0;"><a href="https://barkerscott-web.vercel.app/downloads" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">📁 Access All Files</a></p></div>`;
+      if (bundleLink && bundleDescription) {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">📦 ${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 8px 0; font-size: 13px;">${bundleDescription}</p><p style="margin: 10px 0;"><a href="${bundleLink}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Bundle (ZIP)</a></p></div>`;
       } else if (downloadUrl) {
         return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="margin: 10px 0;"><a href="${downloadUrl}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Now</a></p></div>`;
       } else {
