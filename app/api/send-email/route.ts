@@ -22,10 +22,72 @@ export async function POST(request: NextRequest) {
       "Data Protection Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
     };
 
+    const bundleInfo: any = {
+      "Care Home Starter": "8 essential documents (5 policies + 3 risk assessments)",
+      "Dental Pro": "13 comprehensive documents (8 policies + 5 risk assessments)",
+      "Aesthetic Complete": "20 complete documents (10 policies + 10 risk assessments)",
+      "Ultimate Package": "130+ documents (70+ policies + 60+ risk assessments across all sectors)",
+    };
+
     const itemsHtml = items?.map((item: any) => {
       const downloadUrl = fileMap[item.name];
-      const downloadButton = downloadUrl ? `<p style="margin: 10px 0;"><a href="${downloadUrl}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Now</a></p>` : "";
-      return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p>${downloadButton}</div>`;
+      const bundleDescription = bundleInfo[item.name];
+      
+      if (bundleDescription) {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">📦 ${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 8px 0; font-size: 13px;">${bundleDescription}</p><p style="margin: 10px 0;"><a href="https://barkerscott-web.vercel.app/downloads" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">📁 Access All Files</a></p></div>`;
+      } else if (downloadUrl) {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="margin: 10px 0;"><a href="${downloadUrl}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Now</a></p></div>`;
+      } else {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p></div>`;
+      }
+    }).join("") || "<p>No items</p>";
+    
+    const total = items?.reduce((sum: number, item: any) => sum + item.price, 0) || 0;
+
+    const emailHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 650px; margin: 0 auto; background-color: #ffffff;"><div style="background-color: #0066cc; padding: 20px; color: white; border-radius: 4px 4px 0 0;"><h1 style="margin: 0; font-size: 28px;">✅ Payment Successful!</h1><p style="margin: 8px 0 0 0; font-size: 16px;">Your templates are ready to download</p></div><div style="padding: 20px;"><p>Hi there,</p><p>Thank you for your purchase! We're excited to help you get your compliance templa
+$code = @'
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { customerEmail, items, sessionId } = body;
+    
+    if (!customerEmail) {
+      return NextResponse.json({ error: "Missing email" }, { status: 400 });
+    }
+
+    const apiKey = process.env.RESEND_API_KEY;
+    
+    if (!apiKey) {
+      return NextResponse.json({ error: "No API key" }, { status: 500 });
+    }
+
+    const fileMap: any = {
+      "Safeguarding Adults Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/safeguarding-adults-policy.docx.docx",
+      "Infection Control Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/infection-prevention-control-policy.docx.docx",
+      "Health & Safety Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/health-safety-policy.docx.docx",
+      "Data Protection Policy": "https://barkerscott-web.vercel.app/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
+    };
+
+    const bundleInfo: any = {
+      "Care Home Starter": "8 essential documents (5 policies + 3 risk assessments)",
+      "Dental Pro": "13 comprehensive documents (8 policies + 5 risk assessments)",
+      "Aesthetic Complete": "20 complete documents (10 policies + 10 risk assessments)",
+      "Ultimate Package": "130+ documents (70+ policies + 60+ risk assessments across all sectors)",
+    };
+
+    const itemsHtml = items?.map((item: any) => {
+      const downloadUrl = fileMap[item.name];
+      const bundleDescription = bundleInfo[item.name];
+      
+      if (bundleDescription) {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">📦 ${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 8px 0; font-size: 13px;">${bundleDescription}</p><p style="margin: 10px 0;"><a href="https://barkerscott-web.vercel.app/downloads" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">📁 Access All Files</a></p></div>`;
+      } else if (downloadUrl) {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="margin: 10px 0;"><a href="${downloadUrl}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Now</a></p></div>`;
+      } else {
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p></div>`;
+      }
     }).join("") || "<p>No items</p>";
     
     const total = items?.reduce((sum: number, item: any) => sum + item.price, 0) || 0;
