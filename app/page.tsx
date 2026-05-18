@@ -19,7 +19,7 @@ export default function HomePage() {
 
   return (
     <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", color: '#1a1a1a' }}>
-      {/* STICKY HEADER */}
+      {/* STICKY HEADER - Enhanced */}
       <header style={{
         backgroundColor: 'rgba(255,255,255,0.95)',
         borderBottom: '1px solid #f0f0f0',
@@ -42,8 +42,11 @@ export default function HomePage() {
           <nav style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
             <a href="#features" style={{ color: '#666', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Why Us</a>
             <a href="#pricing" style={{ color: '#666', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Bundles</a>
-            <a href="#subscription" style={{ color: '#666', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Subscription</a>
-            <a href="#faq" style={{ color: '#666', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>FAQ</a>
+            <Link href="/subscription" style={{ textDecoration: 'none' }}>
+              <button style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '2px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}>
+                🔄 Updates
+              </button>
+            </Link>
             <Link href="/policies" style={{ textDecoration: 'none' }}>
               <button style={{ backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '0.625rem 1.25rem', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '14px', cursor: 'pointer', transition: 'all 0.3s' }}>
                 Shop Now
@@ -53,7 +56,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION - Enhanced with Subscription Appeal */}
       <section style={{ backgroundColor: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', backgroundImage: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', color: '#fff', padding: '5rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '1rem', textTransform: 'uppercase' }}>
@@ -61,12 +64,12 @@ export default function HomePage() {
           </div>
           
           <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '700', lineHeight: '1.2', marginBottom: '1.5rem', maxWidth: '800px', margin: '0 auto 1.5rem' }}>
-            Get CQC Ready in Days,<br />
-            <span style={{ color: '#D4AF37' }}>Not Months</span>
+            Get CQC Ready in Days.<br />
+            <span style={{ color: '#D4AF37' }}>Stay Compliant Forever.</span>
           </h1>
 
           <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: '#d1d5db', lineHeight: '1.8', maxWidth: '700px', margin: '0 auto 2rem' }}>
-            Professional, compliance-ready policies and risk assessments. Plus automatic updates when laws change. Used by care homes, dental, aesthetic, GP surgeries—and now you can too.
+            Professional templates get you started. Automatic updates keep you compliant as regulations change—every 3 months, delivered to you.
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
@@ -77,7 +80,7 @@ export default function HomePage() {
             </Link>
             <Link href="/subscription" style={{ textDecoration: 'none' }}>
               <button style={{ border: '2px solid #D4AF37', backgroundColor: 'transparent', color: '#D4AF37', padding: '0.875rem 2rem', borderRadius: '6px', fontWeight: '700', fontSize: '16px', cursor: 'pointer' }}>
-                📧 Learn About Updates
+                🔄 See Subscription Benefits →
               </button>
             </Link>
           </div>
@@ -93,14 +96,26 @@ export default function HomePage() {
               <div style={{ fontSize: '13px', color: '#d1d5db' }}>Risk Assessments</div>
             </div>
             <div>
-              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37' }}>12+</div>
-              <div style={{ fontSize: '13px', color: '#d1d5db' }}>Years Expertise</div>
+              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37' }}>Every 3mo</div>
+              <div style={{ fontSize: '13px', color: '#d1d5db' }}>Auto-Updates</div>
             </div>
             <div>
               <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37' }}>500+</div>
               <div style={{ fontSize: '13px', color: '#d1d5db' }}>Active Users</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* REGULATORY URGENCY SECTION - NEW */}
+      <section style={{ padding: '3rem 1.5rem', backgroundColor: '#fff8e6', borderTop: '4px solid #D4AF37' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0B1D3A', marginBottom: '1rem' }}>
+            Regulations Change. We Don't Make You Chase Them.
+          </h3>
+          <p style={{ fontSize: '16px', color: '#666', lineHeight: '1.6', marginBottom: '0' }}>
+            CQC guidance updates, healthcare law changes, best practice shifts—they happen more often than you think. With our subscription, your templates automatically update every 3 months with full explanations of what changed and why. No compliance surprises. No manual hunting through government guidance. Just templates that stay compliant while you focus on running your practice.
+          </p>
         </div>
       </section>
 
@@ -115,8 +130,8 @@ export default function HomePage() {
             {[
               { icon: '⏱️', pain: 'No Time', solution: 'We handle the research and writing so you don\'t have to' },
               { icon: '🤔', pain: 'Confused About Requirements', solution: 'Every template includes CQC guidance and best practices' },
-              { icon: '💰', pain: 'Can\'t Afford a Consultant', solution: 'Professional templates from just £39.99—not thousands' },
-              { icon: '❌', pain: 'Regulations Keep Changing', solution: 'Subscription updates you automatically—never chase changes again' },
+              { icon: '💰', pain: 'Can\'t Afford a Consultant', solution: 'Professional templates from just £199.99—not thousands' },
+              { icon: '🔄', pain: 'Regulations Change Constantly', solution: 'Subscription auto-updates every 3 months—no manual work' },
             ].map((item, i) => (
               <div key={i} style={{
                 backgroundColor: '#fff',
@@ -144,17 +159,17 @@ export default function HomePage() {
             Why 500+ Healthcare Providers Choose BarkerScott
           </h2>
           <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem', fontSize: '16px' }}>
-            Not just templates. A complete compliance solution built by experts.
+            Templates + Subscription = Total Compliance Peace of Mind
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
             {[
-              { icon: '✓', title: 'CQC-Compliant by Default', desc: 'Every template is written with CQC inspection criteria in mind' },
+              { icon: '✓', title: 'CQC-Compliant Templates', desc: 'Every template written with CQC inspection criteria in mind' },
+              { icon: '🔄', title: 'Automatic Updates', desc: 'Regulations change? Your templates update automatically every 3 months' },
+              { icon: '📋', title: 'Clear Change Notes', desc: 'Every update comes with explanations of what changed and why' },
               { icon: '✓', title: 'Sector-Specific', desc: 'Different templates for each healthcare setting—no generic nonsense' },
-              { icon: '✓', title: 'Instantly Customizable', desc: 'Word documents you can edit in seconds, not rewrite for days' },
-              { icon: '✓', title: 'Professional Quality', desc: '12+ years of compliance expertise baked into every policy' },
-              { icon: '✓', title: 'Money-Back Guarantee', desc: 'Use them risk-free for 30 days. No questions asked.' },
-              { icon: '✓', title: 'Stay Updated', desc: 'Optional subscription keeps your templates compliant with new regulations' },
+              { icon: '⭐', title: '30-Day Guarantee', desc: 'Use risk-free for 30 days. No questions asked if you change your mind' },
+              { icon: '📧', title: 'Monthly Compliance News', desc: 'Stay informed with regulatory updates, CQC guidance, and industry alerts' },
             ].map((item, i) => (
               <div key={i} style={{
                 padding: '2rem',
@@ -171,25 +186,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
+      {/* SOCIAL PROOF - SUBSCRIPTION FOCUSED */}
       <section style={{ padding: '4rem 1.5rem', backgroundColor: '#1a1a1a', color: '#fff' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>500+</div>
-              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Healthcare Providers</p>
+              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Healthcare Providers Trust Us</p>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>99%</div>
-              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Customer Satisfaction</p>
+              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>3,500+</div>
+              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Templates Updated This Year</p>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>£0</div>
-              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Hidden Fees</p>
+              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>2.4hrs</div>
+              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Compliance Work Saved Per Month</p>
             </div>
           </div>
           <p style={{ textAlign: 'center', fontSize: '16px', color: '#d1d5db', fontStyle: 'italic', maxWidth: '700px', margin: '0 auto' }}>
-            "We saved weeks of compliance work. The templates are professional, easy to customize, and actually understand CQC requirements. Highly recommend." — Sarah M., Care Home Manager
+            "We switched to BarkerScott for the templates and stayed for the subscription. No more panic attacks about CQC changes—they just arrive in our inbox explained and ready to go." — Michael H., Care Home Manager
           </p>
         </div>
       </section>
@@ -200,8 +215,11 @@ export default function HomePage() {
           <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: '#0B1D3A' }}>
             Complete Bundles for Every Sector
           </h2>
-          <p style={{ textAlign: 'center', color: '#666', marginBottom: '3rem', fontSize: '16px' }}>
+          <p style={{ textAlign: 'center', color: '#666', marginBottom: '1rem', fontSize: '16px' }}>
             Each bundle includes 1 free policy + 1 free risk assessment worth £70-£80
+          </p>
+          <p style={{ textAlign: 'center', color: '#D4AF37', fontWeight: '600', marginBottom: '3rem', fontSize: '15px' }}>
+            💡 Pro tip: Buy a bundle and get 10% off subscription (£22.49/month for 3 months, then £24.99/month)
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
@@ -247,7 +265,7 @@ export default function HomePage() {
                     fontWeight: '700',
                     cursor: 'pointer'
                   }}>
-                    View Bundle
+                    + Bundle + Subscribe
                   </button>
                 </Link>
               </div>
@@ -256,17 +274,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SUBSCRIPTION BANNER */}
-      <section id="subscription" style={{ padding: '4rem 1.5rem', backgroundColor: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', backgroundImage: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', color: '#fff', textAlign: 'center' }}>
+      {/* SUBSCRIPTION SPOTLIGHT - PREMIUM POSITIONING */}
+      <section style={{ padding: '4rem 1.5rem', backgroundColor: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', backgroundImage: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', color: '#fff', textAlign: 'center' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem', color: '#D4AF37' }}>
-            Stay Compliant Forever
+          <div style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '1rem', textTransform: 'uppercase' }}>
+            THE PEACE-OF-MIND LAYER
+          </div>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '1rem', color: '#fff' }}>
+            Templates are great.<br />
+            <span style={{ color: '#D4AF37' }}>Subscription is essential.</span>
           </h2>
-          <p style={{ fontSize: '18px', color: '#d1d5db', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-            For £24.99/month, get automatic template updates every time regulations change, plus monthly compliance news and priority support.
-          </p>
-          <p style={{ fontSize: '14px', color: '#D4AF37', fontWeight: '600', marginBottom: '2rem' }}>
-            Buy any bundle and get 10% off your first 3 months of subscription
+          <p style={{ fontSize: '18px', color: '#d1d5db', marginBottom: '2rem', lineHeight: '1.6' }}>
+            For just <span style={{ fontSize: '24px', fontWeight: '700', color: '#D4AF37' }}>£24.99/month</span>, get regulatory updates automatically delivered, monthly compliance news, and priority support. When new guidance emerges, your templates update before you even know the law changed.
           </p>
           <Link href="/subscription" style={{ textDecoration: 'none' }}>
             <button style={{
@@ -277,9 +296,25 @@ export default function HomePage() {
               borderRadius: '6px',
               fontWeight: '700',
               fontSize: '16px',
+              cursor: 'pointer',
+              marginRight: '1rem',
+              marginBottom: '1rem'
+            }}>
+              Explore Subscription →
+            </button>
+          </Link>
+          <Link href="/policies" style={{ textDecoration: 'none' }}>
+            <button style={{
+              backgroundColor: 'transparent',
+              color: '#D4AF37',
+              padding: '1rem 2rem',
+              border: '2px solid #D4AF37',
+              borderRadius: '6px',
+              fontWeight: '700',
+              fontSize: '16px',
               cursor: 'pointer'
             }}>
-              Learn About Subscription →
+              Start with Templates
             </button>
           </Link>
         </div>
@@ -289,19 +324,17 @@ export default function HomePage() {
       <section id="faq" style={{ padding: '4rem 1.5rem', backgroundColor: '#f9f9f9' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '3rem', color: '#0B1D3A' }}>
-            Frequently Asked Questions
+            Questions? We've Got Answers
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
-              { q: 'Do I need CQC registration to use these templates?', a: 'These templates are designed for organizations that need CQC compliance. If you\'re registered with or inspected by CQC, these are for you.' },
-              { q: 'Who else needs these compliance templates?', a: 'Anyone operating regulated healthcare services—care homes, dental practices, GPs, aesthetic clinics, ADHD services, weight loss clinics, virtual consultations, and private healthcare providers.' },
-              { q: 'What if my organization isn\'t CQC-regulated?', a: 'Many of these templates are useful for any healthcare provider wanting professional compliance documentation, even without CQC regulation.' },
-              { q: 'Are these templates CQC-approved?', a: 'Our templates follow CQC guidelines and best practices, but we\'re not officially endorsed by CQC. Every template includes customization guidance.' },
-              { q: 'Can I use the templates for multiple sites?', a: 'For the single site license—no. But our pricing is so affordable, many organizations buy multiple licenses for different locations.' },
-              { q: 'What if I don\'t like them?', a: '30-day money-back guarantee. No questions asked. We\'re confident you will love them, but we stand behind our products.' },
-              { q: 'Do I need to be tech-savvy?', a: 'Nope. Everything is a standard Word document. If you can open Word and type, you can customize these.' },
-              { q: 'How does the subscription discount work?', a: 'Buy any starter bundle and get 10% off your monthly subscription for the first 3 months (£22.49/month instead of £24.99).' },
+              { q: 'How often do templates update with the subscription?', a: 'Every 3 months, we review regulations and update templates if needed. Plus you get monthly newsletters about CQC changes, healthcare law updates, and compliance trends.' },
+              { q: 'What if I buy a bundle but later want the subscription?', a: 'Easy. Just sign up at the Subscription page. And if you bought a bundle, you automatically get 10% off your first 3 months (£22.49/month instead of £24.99).' },
+              { q: 'Do I need CQC registration to use these?', a: 'These templates are designed for CQC-regulated organizations. If you\'re registered with or inspected by CQC, they\'re for you. They\'re also useful for any healthcare provider wanting professional compliance documentation.' },
+              { q: 'What counts as a regulatory "update"?', a: 'New CQC guidance, changes to healthcare law, updated best practices, revised industry standards. Anything that could affect your compliance. You\'ll get an explanation of what changed and how it impacts your templates.' },
+              { q: 'Can I cancel the subscription anytime?', a: 'Yes. No contracts, no penalties. Cancel whenever you want. Your templates remain yours to use forever.' },
+              { q: 'Are these templates CQC-approved?', a: 'They follow CQC guidelines and best practices, but we\'re not officially endorsed by CQC. Every template includes customization guidance so you can adapt it to your specific organization.' },
             ].map((faq, i) => (
               <div key={i} style={{
                 backgroundColor: '#fff',
@@ -350,31 +383,55 @@ export default function HomePage() {
       <section style={{ padding: '4rem 1.5rem', backgroundColor: '#0B1D3A', color: '#fff', textAlign: 'center' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '1rem', color: '#D4AF37' }}>
-            Ready to Get CQC-Ready?
+            Two Paths to Compliance Peace of Mind
           </h2>
-          <p style={{ fontSize: '18px', color: '#d1d5db', marginBottom: '2rem', lineHeight: '1.6' }}>
-            Start with our templates today. Add the subscription for peace of mind. Both designed to save you time and keep you compliant.
-          </p>
-          <Link href="/policies" style={{ textDecoration: 'none' }}>
-            <button style={{
-              backgroundColor: '#D4AF37',
-              color: '#0B1D3A',
-              padding: '1rem 2rem',
-              border: 'none',
-              borderRadius: '6px',
-              fontWeight: '700',
-              fontSize: '18px',
-              cursor: 'pointer'
-            }}>
-              ✓ Browse All Templates
-            </button>
-          </Link>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem', marginTop: '2rem' }}>
+            <div style={{ backgroundColor: 'rgba(212,175,55,0.1)', padding: '1.5rem', borderRadius: '8px', border: '1px solid #D4AF37' }}>
+              <p style={{ fontSize: '14px', fontWeight: '600', color: '#D4AF37', marginBottom: '1rem' }}>PATH 1</p>
+              <p style={{ fontSize: '18px', fontWeight: '700', marginBottom: '0.5rem' }}>Start Now</p>
+              <p style={{ fontSize: '14px', color: '#d1d5db', marginBottom: '1.5rem' }}>Browse templates, pick your sector, add to cart</p>
+              <Link href="/policies" style={{ textDecoration: 'none' }}>
+                <button style={{
+                  width: '100%',
+                  backgroundColor: '#D4AF37',
+                  color: '#0B1D3A',
+                  padding: '0.75rem',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}>
+                  Browse Templates
+                </button>
+              </Link>
+            </div>
+            <div style={{ backgroundColor: 'rgba(212,175,55,0.1)', padding: '1.5rem', borderRadius: '8px', border: '2px solid #D4AF37' }}>
+              <p style={{ fontSize: '14px', fontWeight: '600', color: '#D4AF37', marginBottom: '1rem' }}>PATH 2 - RECOMMENDED</p>
+              <p style={{ fontSize: '18px', fontWeight: '700', marginBottom: '0.5rem' }}>Bundle + Subscribe</p>
+              <p style={{ fontSize: '14px', color: '#d1d5db', marginBottom: '0.5rem' }}>Get everything + 10% off subscription</p>
+              <p style={{ fontSize: '12px', color: '#D4AF37', fontWeight: '600', marginBottom: '1.5rem' }}>Save 3 months of subscription fees</p>
+              <Link href="/policies" style={{ textDecoration: 'none' }}>
+                <button style={{
+                  width: '100%',
+                  backgroundColor: '#D4AF37',
+                  color: '#0B1D3A',
+                  padding: '0.75rem',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}>
+                  Bundle + Subscribe
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* FOOTER */}
       <footer style={{ padding: '2rem 1.5rem', backgroundColor: '#000', color: '#999', textAlign: 'center', fontSize: '13px', borderTop: '1px solid #222' }}>
-        <p>© 2026 BarkerScott Ltd. All rights reserved. | CQC Compliance Templates & Subscription Service</p>
+        <p>© 2026 BarkerScott Ltd. All rights reserved. | CQC Compliance Templates & Automatic Updates</p>
         <p style={{ marginTop: '0.5rem' }}>📞 07407 184948 | 📧 info@barker-scott.co.uk</p>
       </footer>
     </div>
