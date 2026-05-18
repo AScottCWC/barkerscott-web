@@ -10,13 +10,12 @@ export default function HomePage() {
     <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", color: '#1a1a1a' }}>
       {/* STICKY HEADER */}
       <header style={{
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255,255,255,0.95)',
         borderBottom: '1px solid #f0f0f0',
         position: 'sticky',
         top: 0,
         zIndex: 40,
-        backdropFilter: 'blur(10px)',
-        backgroundColor: 'rgba(255,255,255,0.95)'
+        backdropFilter: 'blur(10px)'
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
