@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, Suspense } from 'react';
 import Link from 'next/link';
@@ -156,7 +156,7 @@ function ShopContent() {
       description: item.description
     });
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert(`✓ Added to cart! Items: ${cart.length}`);
+    alert(\✓ Added to cart! Items: \\);
   };
 
   return (
@@ -328,7 +328,7 @@ function ShopContent() {
         <section style={{ padding: '3rem 1.5rem' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '2rem', color: '#0B1D3A' }}>
-              {selectedSector === 'all' ? 'All Starter Bundles' : `${SECTORS.find(s => s.id === selectedSector)?.name} Bundles`}
+              {selectedSector === 'all' ? 'All Starter Bundles' : \\ Bundles\}
             </h2>
             {filteredBundles.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '3rem' }}>
