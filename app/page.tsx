@@ -63,9 +63,6 @@ export default function HomePage() {
                 ✓ Browse Templates
               </button>
             </Link>
-            <button style={{ border: '2px solid #D4AF37', backgroundColor: 'transparent', color: '#D4AF37', padding: '0.875rem 2rem', borderRadius: '6px', fontWeight: '700', fontSize: '16px', cursor: 'pointer' }}>
-              📞 Free 30-Min Consultation
-            </button>
           </div>
 
           {/* Hero Stats */}
@@ -148,7 +145,7 @@ export default function HomePage() {
                 borderRadius: '8px',
                 border: '1px solid #e5e5e5'
               }}>
-                <div style={{ fontSize: '24px', color: '#D4AF37', marginBottom: '0.75rem' }}>{item.icon}</div>
+                <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{item.icon}</div>
                 <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '0.5rem', color: '#0B1D3A' }}>{item.title}</h3>
                 <p style={{ color: '#666', fontSize: '14px', margin: 0 }}>{item.desc}</p>
               </div>
@@ -157,37 +154,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF - Real Users */}
-      <section style={{ padding: '4rem 1.5rem', backgroundColor: '#0B1D3A', color: '#fff' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '3rem' }}>
-            Used by 500+ UK Healthcare Providers
-          </h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
-            {[
-              { stat: '500+', desc: 'Active Healthcare Providers' },
-              { stat: '2000+', desc: 'Templates Downloaded' },
-              { stat: '12+', desc: 'Years in Compliance' },
-              { stat: '100%', desc: 'CQC Compliant' },
-            ].map((item, i) => (
-              <div key={i}>
-                <div style={{ fontSize: '3rem', fontWeight: '700', color: '#D4AF37' }}>{item.stat}</div>
-                <p style={{ fontSize: '14px', color: '#d1d5db' }}>{item.desc}</p>
-              </div>
-            ))}
+      {/* SOCIAL PROOF */}
+      <section style={{ padding: '4rem 1.5rem', backgroundColor: '#1a1a1a', color: '#fff' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>500+</div>
+              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Healthcare Providers</p>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>99%</div>
+              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Customer Satisfaction</p>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>£0</div>
+              <p style={{ color: '#d1d5db', fontSize: '14px' }}>Hidden Fees</p>
+            </div>
           </div>
-
-          <div style={{ marginTop: '3rem', paddingTop: '3rem', borderTop: '1px solid rgba(212,175,55,0.2)' }}>
-            <p style={{ fontSize: '16px', fontStyle: 'italic', color: '#d1d5db' }}>
-              "The policies are spot-on for CQC. Our inspector complimented our documentation. Worth every penny."
-            </p>
-            <p style={{ fontSize: '14px', color: '#D4AF37', fontWeight: '700', marginTop: '1rem' }}>— Sarah M., Care Home Manager, Manchester</p>
-          </div>
+          <p style={{ textAlign: 'center', fontSize: '16px', color: '#d1d5db', fontStyle: 'italic', maxWidth: '700px', margin: '0 auto' }}>
+            "We saved weeks of compliance work. The templates are professional, easy to customize, and actually understand CQC requirements. Highly recommend." — Sarah M., Care Home Manager
+          </p>
         </div>
       </section>
 
-      {/* PRICING - Clear Value */}
+      {/* PRICING */}
       <section id="pricing" style={{ padding: '4rem 1.5rem', backgroundColor: '#fff' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: '#0B1D3A' }}>
