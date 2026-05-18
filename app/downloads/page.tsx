@@ -88,37 +88,9 @@ export default function DownloadsPage() {
               <div style={{ padding: '20px', background: '#fff' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '15px' }}>
                   {section.files.map((file, idx) => (
-                    
-                      key={idx}
-                      href={file.path}
-                      download
-                      style={{
-                        padding: '15px',
-                        background: '#e3f2fd',
-                        border: '2px solid #0066cc',
-                        borderRadius: '6px',
-                        textDecoration: 'none',
-                        color: '#0066cc',
-                        fontWeight: '500',
-                        fontSize: '14px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        display: 'block',
-                        textAlign: 'center',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = '#0066cc';
-                        e.currentTarget.style.color = 'white';
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = '#e3f2fd';
-                        e.currentTarget.style.color = '#0066cc';
-                        e.currentTarget.style.transform = 'translateY(0)';
-                      }}
-                    >
-                      ⬇️ {file.name}
-                    </a>
+                    <div key={idx} style={{ padding: '15px', background: '#e3f2fd', border: '2px solid #0066cc', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={(e) => { e.currentTarget.style.background = '#0066cc'; e.currentTarget.style.color = 'white'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseLeave={(e) => { e.currentTarget.style.background = '#e3f2fd'; e.currentTarget.style.color = '#0066cc'; e.currentTarget.style.transform = 'translateY(0)'; }} onClick={() => { const link = document.createElement('a'); link.href = file.path; link.download = true; link.click(); }}>
+                      <div style={{ textAlign: 'center', fontWeight: '500', fontSize: '14px', color: 'inherit' }}>⬇️ {file.name}</div>
+                    </div>
                   ))}
                 </div>
               </div>
