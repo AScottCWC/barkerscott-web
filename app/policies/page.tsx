@@ -156,7 +156,7 @@ function ShopContent() {
       description: item.description
     });
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert(\✓ Added to cart! Items: \\);
+    alert('✓ Added to cart! Items: ' + cart.length);
   };
 
   return (
@@ -328,7 +328,7 @@ function ShopContent() {
         <section style={{ padding: '3rem 1.5rem' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '2rem', color: '#0B1D3A' }}>
-              {selectedSector === 'all' ? 'All Starter Bundles' : \\ Bundles\}
+              {selectedSector === 'all' ? 'All Starter Bundles' : SECTORS.find(s => s.id === selectedSector)?.name + ' Bundles'}
             </h2>
             {filteredBundles.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '3rem' }}>
