@@ -50,7 +50,7 @@ const bundleData = {
 };
 
 export default function BundlesPage() {
-  const [selectedBundle, setSelectedBundle] = useState<keyof typeof bundleData | null>(null);
+  const [selectedBundle, setSelectedBundle] = useState(null);
 
   const bundle = selectedBundle ? bundleData[selectedBundle] : null;
 
@@ -64,98 +64,30 @@ export default function BundlesPage() {
       {!bundle ? (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
           {Object.entries(bundleData).map(([key, data]) => (
-            <div
-              key={key}
-              onClick={() => setSelectedBundle(key as keyof typeof bundleData)}
-              style={{
-                padding: '20px',
-                border: '2px solid #0066cc',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'all 0.3s',
-                background: '#f9f9f9',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#e3f2fd';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#f9f9f9';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
+            <div key={key} onClick={() => setSelectedBundle(key)} style={{ padding: '20px', border: '2px solid #0066cc', borderRadius: '8px', cursor: 'pointer', background: '#f9f9f9' }} onMouseEnter={(e) => { e.currentTarget.style.background = '#e3f2fd'; }} onMouseLeave={(e) => { e.currentTarget.style.background = '#f9f9f9'; }}>
               <h3 style={{ color: '#0066cc', margin: '0 0 10px 0' }}>{data.name}</h3>
               <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>{data.description}</p>
-              <p style={{ color: '#0066cc', margin: '10px 0 0 0', fontSize: '14px', fontWeight: 'bold' }}>
-                View files →
-              </p>
+              <p style={{ color: '#0066cc', margin: '10px 0 0 0', fontSize: '14px', fontWeight: 'bold' }}>View files →</p>
             </div>
           ))}
         </div>
       ) : (
         <div>
-          <button
-            onClick={() => setSelectedBundle(null)}
-            style={{
-              padding: '10px 20px',
-              background: '#0066cc',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              marginBottom: '20px',
-              fontSize: '14px',
-            }}
-          >
-            ← Back to Bundles
-          </button>
-
+          <button onClick={() => setSelectedBundle(null)} style={{ padding: '10px 20px', background: '#0066cc', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginBottom: '20px', fontSize: '14px' }}>← Back to Bundles</button>
           <div style={{ background: '#f9f9f9', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
             <h2 style={{ color: '#0066cc', margin: '0 0 10px 0' }}>{bundle.name}</h2>
             <p style={{ color: '#666', margin: '0', fontSize: '14px' }}>{bundle.description}</p>
           </div>
-
           <div>
             <h3 style={{ color: '#333', marginBottom: '15px' }}>📄 Files in this bundle:</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {bundle.files.map((file, idx) => (
-                
-                  key={idx}
-                  href={file.path}
-                  download
-                  style={{
-                    padding: '12px 15px',
-                    background: '#e3f2fd',
-                    border: '1px solid #0066cc',
-                    borderRadius: '4px',
-                    textDecoration: 'none',
-                    color: '#0066cc',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    transition: 'all 0.2s',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#0066cc';
-                    e.currentTarget.style.color = 'white';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#e3f2fd';
-                    e.currentTarget.style.color = '#0066cc';
-                  }}
-                >
+                <a key={idx} href={file.path} download style={{ padding: '12px 15px', background: '#e3f2fd', border: '1px solid #0066cc', borderRadius: '4px', textDecoration: 'none', color: '#0066cc', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }} onMouseEnter={(e) => { e.currentTarget.style.background = '#0066cc'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.background = '#e3f2fd'; e.currentTarget.style.color = '#0066cc'; }}>
                   <span>{file.name}</span>
                   <span>⬇️</span>
                 </a>
               ))}
             </div>
-          </div>
-
-          <div style={{ marginTop: '30px', padding: '15px', background: '#f5f5f5', borderRadius: '4px', borderLeft: '4px solid #999' }}>
-            <p style={{ margin: '0', color: '#666', fontSize: '13px' }}>
-              💡 <strong>Tip:</strong> Click any file to download. All files are ready to use!
-            </p>
           </div>
         </div>
       )}
