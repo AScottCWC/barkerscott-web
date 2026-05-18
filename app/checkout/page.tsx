@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 
 interface CartItem {
@@ -11,7 +11,7 @@ interface CartItem {
   description?: string;
 }
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -306,7 +306,7 @@ export default function CheckoutPage() {
               </button>
 
               {/* Continue Shopping */}
-              <Link href="/" style={{ textDecoration: 'none' }}>
+              <Link href="/policies" style={{ textDecoration: 'none' }}>
                 <button style={{
                   width: '100%',
                   backgroundColor: '#f0f0f0',
@@ -364,5 +364,13 @@ export default function CheckoutPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center' }}>Loading...</div>}>
+      <CheckoutContent />
+    </Suspense>
   );
 }
