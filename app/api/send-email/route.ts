@@ -17,14 +17,14 @@ export async function POST(request: NextRequest) {
 
     const itemsHtml = items?.map((item: any) => {
       const fileMap: any = {
-        "Safeguarding Adults Policy": "Safeguarding-Adults-Policy.docx",
-        "Health & Safety Policy": "Health-Safety-Policy.docx",
-        "GDPR Policy": "GDPR-Policy.docx",
-        "Risk Assessment Template": "Risk-Assessment-Template.docx",
-        "Incident Report Form": "Incident-Report-Form.docx",
+        "Safeguarding Adults Policy": "/downloads/policies/care-home/safeguarding-adults-policy.docx.docx",
+        "Health & Safety Policy": "/downloads/policies/care-home/health-safety-policy.docx.docx",
+        "GDPR Policy": "/downloads/policies/care-home/data-protection-confidentiality-policy.docx.docx",
+        "Risk Assessment Template": "/downloads/risk-assessments/risk-assessment-template.docx.docx",
+        "Incident Report Form": "/downloads/risk-assessments/incident-report-form.docx.docx",
       };
       const filename = fileMap[item.name] || "";
-      const downloadLink = filename ? `<p style="margin: 10px 0;"><a href="https://barkerscott-web.vercel.app/downloads/${filename}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px;">📥 Download Template</a></p>` : "";
+      const downloadLink = filename ? `<p style="margin: 10px 0;"><a href="https://barkerscott-web.vercel.app${filename}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px;">📥 Download Template</a></p>` : "";
       return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p>${downloadLink}</div>`;
     }).join("") || "<p>No items</p>";
     
