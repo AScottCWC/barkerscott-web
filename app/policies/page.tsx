@@ -2,7 +2,6 @@
 
 import { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 
 interface Product {
   id: string;
@@ -11,7 +10,6 @@ interface Product {
   price: number;
   type: 'policy' | 'risk-assessment';
   sector: string;
-  bundleIds?: string[];
 }
 
 interface Bundle {
@@ -22,12 +20,10 @@ interface Bundle {
   originalPrice: number;
   save: string;
   productCount: number;
-  productIds: string[];
   sector: string;
   badge?: string;
 }
 
-// All individual products
 const PRODUCTS: Product[] = [
   // Care Home
   { id: 'policy-ch-complaints', name: 'Complaints & Compliments Policy', description: 'Handle complaints professionally and embed learning', price: 29.99, type: 'policy', sector: 'care-homes' },
@@ -37,7 +33,7 @@ const PRODUCTS: Product[] = [
   { id: 'policy-ch-ipc', name: 'Infection Prevention & Control Policy', description: 'Keep residents safe from infections', price: 29.99, type: 'policy', sector: 'care-homes' },
   { id: 'ra-ch-falls', name: 'Falls Prevention Risk Assessment', description: 'Identify and mitigate fall hazards', price: 24.99, type: 'risk-assessment', sector: 'care-homes' },
   { id: 'ra-ch-medication', name: 'Medication Management Risk Assessment', description: 'Safe medication storage and administration', price: 24.99, type: 'risk-assessment', sector: 'care-homes' },
-  
+
   // Dental
   { id: 'policy-dent-complaints', name: 'Complaints Handling Policy', description: 'Manage patient feedback professionally', price: 29.99, type: 'policy', sector: 'dental' },
   { id: 'policy-dent-consent', name: 'Consent to Treatment Policy', description: 'Informed consent and patient rights', price: 29.99, type: 'policy', sector: 'dental' },
@@ -45,6 +41,14 @@ const PRODUCTS: Product[] = [
   { id: 'policy-dent-radiation', name: 'Radiation Protection Policy', description: 'Safe use of dental radiography', price: 29.99, type: 'policy', sector: 'dental' },
   { id: 'ra-dent-conscious-sedation', name: 'Conscious Sedation Risk Assessment', description: 'Safe sedation procedures', price: 24.99, type: 'risk-assessment', sector: 'dental' },
   { id: 'ra-dent-cross-infection', name: 'Cross-Infection Control Assessment', description: 'Decontamination protocols', price: 24.99, type: 'risk-assessment', sector: 'dental' },
+
+  // Aesthetic
+  { id: 'policy-aes-consent', name: 'Consent, Risk & Disclosure Policy', description: 'Informed consent for aesthetic procedures', price: 29.99, type: 'policy', sector: 'aesthetic' },
+  { id: 'policy-aes-ipc', name: 'Infection Prevention & Control Policy', description: 'Sterile technique and decontamination', price: 29.99, type: 'policy', sector: 'aesthetic' },
+  { id: 'policy-aes-marketing', name: 'Marketing & Advertising Policy', description: 'HCPC-compliant advertising standards', price: 29.99, type: 'policy', sector: 'aesthetic' },
+  { id: 'ra-aes-botox', name: 'Botulinum Toxin (Botox) Risk Assessment', description: 'Safe Botox administration', price: 24.99, type: 'risk-assessment', sector: 'aesthetic' },
+  { id: 'ra-aes-dermal-fillers', name: 'Dermal Filler Risk Assessment', description: 'Safe filler administration', price: 24.99, type: 'risk-assessment', sector: 'aesthetic' },
+  { id: 'ra-aes-laser-ipl', name: 'Laser & IPL Risk Assessment', description: 'Laser safety and skin reactions', price: 24.99, type: 'risk-assessment', sector: 'aesthetic' },
 
   // GP Surgery
   { id: 'policy-gp-complaints', name: 'Complaints Handling Policy', description: 'NHS and patient feedback management', price: 29.99, type: 'policy', sector: 'gp' },
@@ -54,95 +58,64 @@ const PRODUCTS: Product[] = [
   { id: 'ra-gp-coshh', name: 'COSHH Risk Assessment', description: 'Hazardous substance management', price: 24.99, type: 'risk-assessment', sector: 'gp' },
   { id: 'ra-gp-ipc', name: 'Infection Prevention & Control Assessment', description: 'IPC compliance audit', price: 24.99, type: 'risk-assessment', sector: 'gp' },
 
-  // Aesthetic Clinic
-  { id: 'policy-aes-consent', name: 'Consent, Risk & Disclosure Policy', description: 'Informed consent for aesthetic procedures', price: 29.99, type: 'policy', sector: 'aesthetic' },
-  { id: 'policy-aes-ipc', name: 'Infection Prevention & Control Policy', description: 'Sterile technique and decontamination', price: 29.99, type: 'policy', sector: 'aesthetic' },
-  { id: 'policy-aes-marketing', name: 'Marketing & Advertising Policy', description: 'HCPC-compliant advertising standards', price: 29.99, type: 'policy', sector: 'aesthetic' },
-  { id: 'ra-aes-botox', name: 'Botulinum Toxin (Botox) Risk Assessment', description: 'Safe Botox administration', price: 24.99, type: 'risk-assessment', sector: 'aesthetic' },
-  { id: 'ra-aes-dermal-fillers', name: 'Dermal Filler Risk Assessment', description: 'Safe filler administration', price: 24.99, type: 'risk-assessment', sector: 'aesthetic' },
-  { id: 'ra-aes-laser-ipl', name: 'Laser & IPL Risk Assessment', description: 'Laser safety and skin reactions', price: 24.99, type: 'risk-assessment', sector: 'aesthetic' },
+  // Weight Loss
+  { id: 'policy-wl-consent', name: 'Informed Consent Policy', description: 'Weight loss procedure risks and benefits', price: 29.99, type: 'policy', sector: 'weight-loss' },
+  { id: 'policy-wl-data-protection', name: 'Data Protection & Confidentiality', description: 'Patient privacy for sensitive health data', price: 29.99, type: 'policy', sector: 'weight-loss' },
+  { id: 'policy-wl-medical-supervision', name: 'Medical Supervision Policy', description: 'Healthcare professional oversight', price: 29.99, type: 'policy', sector: 'weight-loss' },
+  { id: 'policy-wl-complaints', name: 'Complaints & Feedback Policy', description: 'Patient complaint management', price: 29.99, type: 'policy', sector: 'weight-loss' },
+  { id: 'ra-wl-medication-interaction', name: 'Medication Interaction Risk Assessment', description: 'Drug interaction screening', price: 24.99, type: 'risk-assessment', sector: 'weight-loss' },
+  { id: 'ra-wl-patient-screening', name: 'Patient Suitability Risk Assessment', description: 'Medical screening and contraindications', price: 24.99, type: 'risk-assessment', sector: 'weight-loss' },
+
+  // Virtual Clinic
+  { id: 'policy-vc-data-security', name: 'Data Security & Encryption Policy', description: 'Protect patient data in digital consultations', price: 29.99, type: 'policy', sector: 'virtual-clinic' },
+  { id: 'policy-vc-consent', name: 'Digital Consent Policy', description: 'Remote consultation consent procedures', price: 29.99, type: 'policy', sector: 'virtual-clinic' },
+  { id: 'policy-vc-confidentiality', name: 'Video Consultation Confidentiality', description: 'Privacy in virtual consultations', price: 29.99, type: 'policy', sector: 'virtual-clinic' },
+  { id: 'policy-vc-technical-support', name: 'Technical Support & Backup Policy', description: 'System failures and contingency planning', price: 29.99, type: 'policy', sector: 'virtual-clinic' },
+  { id: 'ra-vc-cyber-security', name: 'Cyber Security Risk Assessment', description: 'Data breach and hacking protection', price: 24.99, type: 'risk-assessment', sector: 'virtual-clinic' },
+  { id: 'ra-vc-patient-verification', name: 'Patient Identity Verification RA', description: 'Verify patient identity remotely', price: 24.99, type: 'risk-assessment', sector: 'virtual-clinic' },
+
+  // ADHD
+  { id: 'policy-adhd-diagnosis', name: 'Diagnostic Procedure Policy', description: 'ADHD assessment and diagnosis protocols', price: 29.99, type: 'policy', sector: 'adhd' },
+  { id: 'policy-adhd-medication', name: 'ADHD Medication Management', description: 'Medication prescribing and monitoring', price: 29.99, type: 'policy', sector: 'adhd' },
+  { id: 'policy-adhd-safeguarding', name: 'Safeguarding Policy', description: 'Protect vulnerable and child patients', price: 29.99, type: 'policy', sector: 'adhd' },
+  { id: 'policy-adhd-complaints', name: 'Complaints & Review Policy', description: 'Handle patient and carer feedback', price: 29.99, type: 'policy', sector: 'adhd' },
+  { id: 'ra-adhd-child-safeguarding', name: 'Child Safeguarding Risk Assessment', description: 'Protect children in services', price: 24.99, type: 'risk-assessment', sector: 'adhd' },
+  { id: 'ra-adhd-medication-management', name: 'Medication Management Risk Assessment', description: 'Safe ADHD medication administration', price: 24.99, type: 'risk-assessment', sector: 'adhd' },
 
   // Private Healthcare
   { id: 'policy-phc-clinical-governance', name: 'Clinical Governance Policy', description: 'Quality assurance and safety', price: 29.99, type: 'policy', sector: 'private-health' },
   { id: 'policy-phc-consent', name: 'Consent to Treatment Policy', description: 'Informed consent procedures', price: 29.99, type: 'policy', sector: 'private-health' },
-  { id: 'policy-phc-data-protection', name: 'Data Protection & Confidentiality Policy', description: 'Patient privacy and GDPR', price: 29.99, type: 'policy', sector: 'private-health' },
+  { id: 'policy-phc-data-protection', name: 'Data Protection & Confidentiality', description: 'Patient privacy and GDPR', price: 29.99, type: 'policy', sector: 'private-health' },
   { id: 'ra-phc-coshh', name: 'COSHH Risk Assessment', description: 'Chemical safety', price: 24.99, type: 'risk-assessment', sector: 'private-health' },
   { id: 'ra-phc-medical-equipment', name: 'Medical Equipment Risk Assessment', description: 'Device safety and maintenance', price: 24.99, type: 'risk-assessment', sector: 'private-health' },
 ];
 
-// Bundles
 const BUNDLES: Bundle[] = [
-  {
-    id: 'bundle-care-home',
-    name: 'Care Home Starter',
-    description: 'Essential policies and risk assessments for care homes',
-    price: 199.99,
-    originalPrice: 349.99,
-    save: 'Save £150',
-    productCount: 7,
-    productIds: ['policy-ch-complaints', 'policy-ch-eol', 'policy-ch-falls', 'policy-ch-fire', 'policy-ch-ipc', 'ra-ch-falls', 'ra-ch-medication'],
-    sector: 'care-homes'
-  },
-  {
-    id: 'bundle-dental',
-    name: 'Dental Practice Pro',
-    description: 'Complete compliance package for dental practices',
-    price: 279.99,
-    originalPrice: 479.99,
-    save: 'Save £200',
-    productCount: 6,
-    productIds: ['policy-dent-complaints', 'policy-dent-consent', 'policy-dent-ipc', 'policy-dent-radiation', 'ra-dent-conscious-sedation', 'ra-dent-cross-infection'],
-    sector: 'dental',
-    badge: '★ POPULAR'
-  },
-  {
-    id: 'bundle-gp',
-    name: 'GP Surgery Essentials',
-    description: 'NHS-aligned policies and assessments',
-    price: 249.99,
-    originalPrice: 449.99,
-    save: 'Save £200',
-    productCount: 6,
-    productIds: ['policy-gp-complaints', 'policy-gp-consent', 'policy-gp-data-protection', 'policy-gp-ipc', 'ra-gp-coshh', 'ra-gp-ipc'],
-    sector: 'gp'
-  },
-  {
-    id: 'bundle-aesthetic',
-    name: 'Aesthetic Clinic Complete',
-    description: 'Comprehensive policies for aesthetic practitioners',
-    price: 329.99,
-    originalPrice: 599.99,
-    save: 'Save £270',
-    productCount: 6,
-    productIds: ['policy-aes-consent', 'policy-aes-ipc', 'policy-aes-marketing', 'ra-aes-botox', 'ra-aes-dermal-fillers', 'ra-aes-laser-ipl'],
-    sector: 'aesthetic'
-  },
-  {
-    id: 'bundle-private',
-    name: 'Private Healthcare Package',
-    description: 'Clinical governance and compliance bundle',
-    price: 299.99,
-    originalPrice: 499.99,
-    save: 'Save £200',
-    productCount: 5,
-    productIds: ['policy-phc-clinical-governance', 'policy-phc-consent', 'policy-phc-data-protection', 'ra-phc-coshh', 'ra-phc-medical-equipment'],
-    sector: 'private-health'
-  },
+  { id: 'bundle-care-home', name: 'Care Home Starter', description: 'Essential compliance for care homes', price: 199.99, originalPrice: 269.99, save: 'Save £70', productCount: 7, sector: 'care-homes' },
+  { id: 'bundle-dental', name: 'Dental Practice Pro', description: 'Complete dental compliance', price: 219.99, originalPrice: 299.99, save: 'Save £80', productCount: 6, sector: 'dental', badge: '★ POPULAR' },
+  { id: 'bundle-aesthetic', name: 'Aesthetic Clinic Complete', description: 'Aesthetic practitioner compliance', price: 249.99, originalPrice: 329.99, save: 'Save £80', productCount: 6, sector: 'aesthetic' },
+  { id: 'bundle-gp', name: 'GP Surgery Essentials', description: 'NHS-aligned compliance package', price: 219.99, originalPrice: 299.99, save: 'Save £80', productCount: 6, sector: 'gp' },
+  { id: 'bundle-weight-loss', name: 'Weight Loss Clinic Complete', description: 'Weight management compliance', price: 209.99, originalPrice: 289.99, save: 'Save £80', productCount: 6, sector: 'weight-loss' },
+  { id: 'bundle-virtual-clinic', name: 'Virtual Clinic Package', description: 'Digital healthcare compliance', price: 209.99, originalPrice: 289.99, save: 'Save £80', productCount: 6, sector: 'virtual-clinic' },
+  { id: 'bundle-adhd', name: 'ADHD Clinic Essentials', description: 'ADHD service compliance', price: 229.99, originalPrice: 309.99, save: 'Save £80', productCount: 6, sector: 'adhd' },
+  { id: 'bundle-private-health', name: 'Private Healthcare Package', description: 'Private clinic compliance', price: 239.99, originalPrice: 319.99, save: 'Save £80', productCount: 5, sector: 'private-health' },
 ];
 
 const SECTORS = [
   { id: 'all', name: 'All Sectors', icon: '🏥' },
   { id: 'care-homes', name: 'Care Homes', icon: '👴' },
-  { id: 'dental', name: 'Dental Clinics', icon: '🦷' },
-  { id: 'gp', name: 'GP Surgeries', icon: '⚕️' },
-  { id: 'aesthetic', name: 'Aesthetic Clinics', icon: '✨' },
-  { id: 'private-health', name: 'Private Healthcare', icon: '🏨' },
+  { id: 'dental', name: 'Dental', icon: '🦷' },
+  { id: 'aesthetic', name: 'Aesthetic', icon: '✨' },
+  { id: 'gp', name: 'GP Surgery', icon: '⚕️' },
+  { id: 'weight-loss', name: 'Weight Loss', icon: '💪' },
+  { id: 'virtual-clinic', name: 'Virtual Clinic', icon: '💻' },
+  { id: 'adhd', name: 'ADHD', icon: '🧠' },
+  { id: 'private-health', name: 'Private Healthcare', icon: '🏥' },
 ];
 
 function ShopContent() {
   const [selectedSector, setSelectedSector] = useState('all');
   const [viewType, setViewType] = useState<'bundles' | 'individual'>('bundles');
-  const searchParams = useSearchParams();
 
   const filteredBundles = selectedSector === 'all' ? BUNDLES : BUNDLES.filter(b => b.sector === selectedSector);
   const filteredProducts = selectedSector === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.sector === selectedSector);
@@ -214,7 +187,7 @@ function ShopContent() {
         </div>
       </header>
 
-      {/* DO I NEED CQC? SECTION - NEAR TOP */}
+      {/* DO I NEED CQC? SECTION */}
       <section style={{
         backgroundColor: '#0B1D3A',
         color: '#fff',
@@ -222,11 +195,7 @@ function ShopContent() {
         marginBottom: '2rem'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: '700',
-            marginBottom: '1rem'
-          }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem' }}>
             ❓ Do I Need CQC Compliance Templates?
           </h2>
           <div style={{
@@ -260,7 +229,7 @@ function ShopContent() {
           <h2 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '1.5rem', color: '#0B1D3A' }}>Select Your Sector</h2>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
             gap: '1rem'
           }}>
             {SECTORS.map(sector => (
@@ -274,12 +243,12 @@ function ShopContent() {
                   borderRadius: '8px',
                   cursor: 'pointer',
                   fontWeight: selectedSector === sector.id ? '700' : '600',
-                  fontSize: '14px',
+                  fontSize: '13px',
                   color: selectedSector === sector.id ? '#0B1D3A' : '#666',
                   transition: 'all 0.2s'
                 }}
               >
-                <div style={{ fontSize: '24px', marginBottom: '0.5rem' }}>{sector.icon}</div>
+                <div style={{ fontSize: '20px', marginBottom: '0.25rem' }}>{sector.icon}</div>
                 {sector.name}
               </button>
             ))}
@@ -303,7 +272,7 @@ function ShopContent() {
               fontSize: '14px'
             }}
           >
-            📦 Starter Bundles
+            📦 Starter Bundles (Best Value)
           </button>
           <button
             onClick={() => setViewType('individual')}
@@ -332,7 +301,7 @@ function ShopContent() {
             </h2>
             {filteredBundles.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '3rem' }}>
-                <p style={{ color: '#999', fontSize: '16px' }}>No bundles available for this sector yet. Check back soon!</p>
+                <p style={{ color: '#999', fontSize: '16px' }}>No bundles available for this sector yet.</p>
               </div>
             ) : (
               <div style={{
@@ -374,7 +343,7 @@ function ShopContent() {
                     </h3>
                     <p style={{ fontSize: '14px', opacity: 0.9, marginBottom: '1rem' }}>{bundle.description}</p>
                     <p style={{ fontSize: '13px', fontWeight: '600', color: bundle.badge ? '#D4AF37' : '#666', marginBottom: '1rem' }}>
-                      📦 {bundle.productCount} templates
+                      📦 {bundle.productCount} templates included
                     </p>
                     <div style={{ marginBottom: '1rem' }}>
                       <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '0.5rem' }}>
@@ -382,6 +351,9 @@ function ShopContent() {
                       </div>
                       <div style={{ fontSize: '13px', opacity: 0.8 }}>
                         Was £{bundle.originalPrice.toFixed(2)} · {bundle.save}
+                      </div>
+                      <div style={{ fontSize: '12px', color: bundle.badge ? '#D4AF37' : '#0B1D3A', fontWeight: '600', marginTop: '0.5rem' }}>
+                        + Get 10% off subscription (£22.49/mo for 3 months)
                       </div>
                     </div>
                     <button
@@ -484,16 +456,16 @@ function ShopContent() {
         </section>
       )}
 
-      {/* CTA SECTION */}
-      <section style={{ padding: '3rem 1.5rem', backgroundColor: '#0B1D3A', color: '#fff', textAlign: 'center' }}>
+      {/* SUBSCRIPTION CTA */}
+      <section style={{ padding: '3rem 1.5rem', backgroundColor: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', backgroundImage: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', color: '#fff', textAlign: 'center' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '1rem', color: '#D4AF37' }}>
-            Need Consulting Help?
+            Keep Your Templates Updated
           </h2>
           <p style={{ fontSize: '16px', color: '#d1d5db', marginBottom: '2rem', lineHeight: '1.6' }}>
-            Our CQC consultants can guide you through compliance. Schedule a free consultation.
+            For just £24.99/month, get automatic updates when regulations change, plus monthly compliance news.
           </p>
-          <Link href="/contact" style={{ textDecoration: 'none' }}>
+          <Link href="/subscription" style={{ textDecoration: 'none' }}>
             <button style={{
               backgroundColor: '#D4AF37',
               color: '#0B1D3A',
@@ -504,7 +476,7 @@ function ShopContent() {
               fontSize: '16px',
               cursor: 'pointer'
             }}>
-              📞 Get in Touch
+              Learn About Subscription →
             </button>
           </Link>
         </div>
