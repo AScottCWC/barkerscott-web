@@ -10,23 +10,22 @@ export async function POST(request: NextRequest) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    
     if (!apiKey) {
       return NextResponse.json({ error: "No API key" }, { status: 500 });
     }
 
     const bundleLinks: any = {
-      "Care Home Starter": "https://barkerscott-web.vercel.app/api/download-bundle?bundle=care-home-starter",
-      "Dental Pro": "https://barkerscott-web.vercel.app/api/download-bundle?bundle=dental-pro",
-      "Aesthetic Complete": "https://barkerscott-web.vercel.app/api/download-bundle?bundle=aesthetic-complete",
-      "Ultimate Package": "https://barkerscott-web.vercel.app/api/download-bundle?bundle=ultimate-package",
+      "Care Home Starter": "https://barkerscott-web.vercel.app/bundles#care-home-starter",
+      "Dental Pro": "https://barkerscott-web.vercel.app/bundles#dental-pro",
+      "Aesthetic Complete": "https://barkerscott-web.vercel.app/bundles#aesthetic-complete",
+      "Ultimate Package": "https://barkerscott-web.vercel.app/bundles#ultimate-package",
     };
 
     const bundleInfo: any = {
       "Care Home Starter": "8 essential documents (5 policies + 3 risk assessments)",
       "Dental Pro": "13 comprehensive documents (8 policies + 5 risk assessments)",
       "Aesthetic Complete": "20 complete documents (10 policies + 10 risk assessments)",
-      "Ultimate Package": "130+ documents (70+ policies + 60+ risk assessments across all sectors)",
+      "Ultimate Package": "130+ documents across all sectors",
     };
 
     const itemsHtml = items?.map((item: any) => {
@@ -34,7 +33,7 @@ export async function POST(request: NextRequest) {
       const bundleDescription = bundleInfo[item.name];
       
       if (bundleLink && bundleDescription) {
-        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">📦 ${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 8px 0; font-size: 13px;">${bundleDescription}</p><p style="margin: 10px 0;"><a href="${bundleLink}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Bundle (ZIP)</a></p></div>`;
+        return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">📦 ${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p><p style="color: #0066cc; margin: 8px 0; font-size: 13px;">${bundleDescription}</p><p style="margin: 10px 0;"><a href="${bundleLink}" style="display: inline-block; padding: 10px 15px; background-color: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">⬇️ Download Files</a></p></div>`;
       } else {
         return `<div style="margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-left: 4px solid #0066cc; border-radius: 4px;"><strong style="font-size: 16px;">${item.name}</strong><p style="color: #666; margin: 8px 0; font-size: 14px;">£${item.price}</p></div>`;
       }
@@ -61,18 +60,11 @@ export async function POST(request: NextRequest) {
     const result = await response.json();
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: "Failed to send email", details: result },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to send email", details: result }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, id: result.id });
-
   } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
