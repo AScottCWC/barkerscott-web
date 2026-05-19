@@ -161,7 +161,7 @@ function AccountContent() {
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <h2 className="text-xl font-bold mb-4">Filter by Sector</h2>
           <div className="flex flex-wrap gap-2">
-            {sectors.map(sector => (
+            {sectors.map((sector) => (
               <button
                 key={sector}
                 onClick={() => setFilter(sector)}
@@ -178,7 +178,7 @@ function AccountContent() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map(file => (
+          {filtered.map((file) => (
             
               key={file.id}
               href={`https://drive.google.com/file/d/${file.id}/view`}
