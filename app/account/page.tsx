@@ -1,189 +1,327 @@
-'use client';
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@supabase/supabase-js";
+import { driveFiles } from "@/lib/driveFileIds";
 
-import { Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
-interface Subscription {
-  id: string;
-  status: string;
-  currentPeriodEnd: string;
-}
+type Sector = "adhd" | "weightLoss" | "telehealth";
 
-interface FileItem {
+interface Document {
   id: string;
   name: string;
-  sector: string;
+  type: "policy" | "ra";
+  sector: Sector;
+  source: "subscription" | "bundle" | "individual";
 }
 
-const allFiles: FileItem[] = [
-  { id: '1V5lxLzVUWZ8YuBjsImg0KvfcRIzpOZ5Z', name: 'Adverse Event Management Policy', sector: 'Aesthetics' },
-  { id: '1cb4YnTTliMsF8pifkVVYlz3hDq3IBtEV', name: 'Client Safeguarding Policy', sector: 'Aesthetics' },
-  { id: '1N3gCE6agR6WZGidrQuKw5AFGLU4cpeXG', name: 'Complaints Policy', sector: 'Aesthetics' },
-  { id: '1HKyz3SwxoYruD_h4KwSfs1CB6NjbiPbl', name: 'Consent Risk Disclosure Policy', sector: 'Aesthetics' },
-  { id: '1yIHrTRvIRQMGwX5dQ5L3ZzD-zH2o1s_q', name: 'Health Safety Policy', sector: 'Aesthetics' },
-  { id: '1fZrEw4iIitkmQ55_b7PyOCDWSPy2L8w', name: 'Infection Control Policy', sector: 'Aesthetics' },
-  { id: '14sytmaoIDGdwzrl1DttXufXsUYWHTFvZ', name: 'Marketing Advertising Policy', sector: 'Aesthetics' },
-  { id: '1Qi3dOI96f0FKqXiQzcI_V_B0HD8-7yVc', name: 'Practitioner Competency Policy', sector: 'Aesthetics' },
-  { id: '1LlNQ_AzYNH5BrylfneWDg-hLP_CEj-Xo', name: 'Privacy Data Protection Policy', sector: 'Aesthetics' },
-  { id: '12BRcHcl9YlyHIuK-ZRFvJ8qwfp0nxCKA', name: 'Product Management Policy', sector: 'Aesthetics' },
-  { id: '19LwZAroTpFNjTFKFEcI_OtA5GLtOq2dr', name: 'Botulinum Toxin Administration RA', sector: 'Aesthetics' },
-  { id: '1WpTnB_W0GH_fErifhBBKr7p2v60Q3KSx', name: 'Chemical Skin Peels RA', sector: 'Aesthetics' },
-  { id: '1Gg-MwCOxCRs7cafby2f4833I_kJIXpc', name: 'Cryotherapy Cryolipolysis RA', sector: 'Aesthetics' },
-  { id: '1APpWMr6CwnD9rOxeh4SZ7-Z6Bbqtoq1F', name: 'Dermal Filler Treatments RA', sector: 'Aesthetics' },
-  { id: '1nNcU86hgBPgutBvYRuFuQNfgOjYy6FhW', name: 'Infection Prevention Control IPC RA', sector: 'Aesthetics' },
-  { id: '1_DZydvp5KKg5z7Xb8iLa7pSvZ_abQEPn', name: 'Laser Intense Pulsed Light IPL RA', sector: 'Aesthetics' },
-  { id: '1pH4ogNnHixO8SaKhqueGFE2SrhQ1rwn', name: 'Microneedling Collagen Induction RA', sector: 'Aesthetics' },
-  { id: '1E42jvB1AC4eAI9qk40ihPG5Uj6RICa5f', name: 'Patient Consultation Consent RA', sector: 'Aesthetics' },
-  { id: '1IvqL5tO30YT-w7mGkKRA583wf35is1FL', name: 'Platelet Rich Plasma PRP RA', sector: 'Aesthetics' },
-  { id: '1Dyi1rPRDAXd--RNnM6fIYvqf_AigtmET', name: 'Thread Lift Procedures PDO RA', sector: 'Aesthetics' },
-  { id: '17git9BUMBA-Ck-cf4AQ6GrT5gTHv_mzl', name: 'Complaints Handling', sector: 'GP' },
-  { id: '1mSvxg7ehkxksGE5sYtatlJOd44T_eWpG', name: 'Consent and Confidentiality', sector: 'GP' },
-  { id: '1Ow3MLi6b1QMtSI4Sjc6UXI2WKdE5azVI', name: 'Data Protection and Information Governance', sector: 'GP' },
-  { id: '1nNqDlZ2iY4-qWC_r63wWva6YcdOw1MFg', name: 'Equality Diversity and Inclusion', sector: 'GP' },
-  { id: '1aHI6P9Yz1xKcw-VAFK3z8fVDtlEK4MUu', name: 'Fire Safety', sector: 'GP' },
-  { id: '1rOSdZH5dO9gkKIVFbrNLvDTWsX8xodCR', name: 'Health and Safety', sector: 'GP' },
-  { id: '1ey_gcefg4e9bXdukEElEUwmBv_nb1c2f', name: 'Infection Prevention and Control', sector: 'GP' },
-  { id: '1yL7Dt9UkfeJ5R7JU_u6dSGJn4Gage7z-', name: 'Lone Working', sector: 'GP' },
-  { id: '1PYuOjnaCAihT5JlETSUqrA0SHH68lXm5', name: 'Medicines Management', sector: 'GP' },
-  { id: '13EPkLnPCMew5r5Xec9i6QvVGvcbJereF', name: 'Safeguarding Children and Adults at Risk', sector: 'GP' },
-  { id: '1pBKaLoZvh5C2nB6kG4bqkaCkFqL_s7Y4', name: 'COSHH RA', sector: 'GP' },
-  { id: '1fT9GJITPl-48gI3mbEIR1IjxG66-5OEG', name: 'Data Protection RA', sector: 'GP' },
-  { id: '17AuQnawGGL2BtmQQZRC4nHbUYXmqkIF', name: 'Display Screen Equipment DSE RA', sector: 'GP' },
-  { id: '1WhWIaNIXphS_csSCJmp65zOB4QhC_QG', name: 'Fire Safety RA', sector: 'GP' },
-  { id: '14XoVr5XO8nDV03LTZnqDSHlDamgxYOMs', name: 'Infection Prevention and Control RA', sector: 'GP' },
-  { id: '1TQ8Ukhn1jlchc7SKZFhBIXYPIVCm5vYV', name: 'Lone Working RA', sector: 'GP' },
-  { id: '1wr9nndxIRTLHuRDnporzTWiGJe3ftuKj', name: 'Manual Handling RA', sector: 'GP' },
-  { id: '1A9Rnb2wX4OJHs-dG4R2lT-GkwfJBpHlC', name: 'Medicines Management and Storage RA', sector: 'GP' },
-  { id: '1EGGDgCJMXTeNp3ptrfrY4POlxNhJDLx', name: 'Safeguarding Adults and Children RA', sector: 'GP' },
-  { id: '1wM3_BJSsBSYZpW8n4kyUeu85SjBA1CYS', name: 'Workplace Violence and Aggression RA', sector: 'GP' },
-  { id: '1iXjjtIjVCxSGAQ0e8R_nIV3mpG6eC-SH', name: 'Business Continuity and Emergency Planning Policy', sector: 'Private Healthcare' },
-  { id: '1VM6-oRPA_uBDkpVTFa2n89add2HzXR9_', name: 'Clinical Governance Policy', sector: 'Private Healthcare' },
-  { id: '19wP8O8wn8GJNGgC_mC-IghBiMHRrQval', name: 'Complaints Handling Policy', sector: 'Private Healthcare' },
-  { id: '14njLgrFnNZNgjIpsvR0inf-rZLi59U4p', name: 'Consent to Treatment Policy', sector: 'Private Healthcare' },
-  { id: '1JN5fqK0uFzTyY-qJw_QuU55rqQzUd7RU', name: 'Data Protection and Confidentiality Policy', sector: 'Private Healthcare' },
-  { id: '1kWLahzoiTj3mYjK_KsAwjMgYgqerQp4z', name: 'Health and Safety Policy', sector: 'Private Healthcare' },
-  { id: '1iTXFXonqDpMXd6NNK9Kekd37SmTxpuUJ', name: 'Infection Prevention and Control Policy', sector: 'Private Healthcare' },
-  { id: '1v1tquuA9jISU1gBPICVlYMWNyK3DdFNR', name: 'Medicines Management Policy', sector: 'Private Healthcare' },
-  { id: '1UmXpFy-AIgSytjnWuakCd-cFr0JksqMa', name: 'Safeguarding Adults Policy', sector: 'Private Healthcare' },
-  { id: '1_Q-V1DZPz-clwYA2DzZiCwsMoDt-vquu', name: 'Staffing and Recruitment Policy', sector: 'Private Healthcare' },
-  { id: '1DEOYNA7c4Zt7tdkP6CO5OQTxcYAyJcs', name: 'COSHH RA', sector: 'Private Healthcare' },
-  { id: '1yFV32hmQM1oE8itUDRDctiiQHjstotpU', name: 'Fire Safety RA', sector: 'Private Healthcare' },
-  { id: '1dTKX2oyjlN8-NmhVBk1w7C1LfOKQqRCH', name: 'Infection Control RA', sector: 'Private Healthcare' },
-  { id: '1sOqS8JjS05dUzO-2G9-vrqAAXrBAG-ZM', name: 'Information Governance Cyber RA', sector: 'Private Healthcare' },
-  { id: '1DN9uchpCPwX69NmbEgV4pqRAU2GuZmzt', name: 'Lone Working RA', sector: 'Private Healthcare' },
-  { id: '1zNLrcUBoQ9gFDH9JG9JXI4I3Zg1TRaqy', name: 'Manual Handling RA', sector: 'Private Healthcare' },
-  { id: '1vpTX_xZCHc4YNnhuvxJ5qY3Uaw_e8lsq', name: 'Medical Equipment Devices RA', sector: 'Private Healthcare' },
-  { id: '1u0mcQ-LiuzDEBlCDOMb7WwiJKPjQ_xg2', name: 'Medicines Storage Handling RA', sector: 'Private Healthcare' },
-  { id: '1G_x_4EOiCMuB__vVMsiIwD04OY01ZzBh', name: 'Slips Trips Falls RA', sector: 'Private Healthcare' },
-  { id: '1bMcYVAk4RxkzFDtrw1KFnm-F7gGliNfB', name: 'Violence Aggression RA', sector: 'Private Healthcare' },
-];
-
-function AccountContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [filter, setFilter] = useState('All');
+export default function AccountPage() {
+  const [user, setUser] = useState<any>(null);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [subscription, setSubscription] = useState(false);
+  const [bundles, setBundles] = useState<Sector[]>([]);
+  const [individualDocs, setIndividualDocs] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
-    const userEmail = localStorage.getItem('userEmail') || '';
-    setEmail(userEmail);
-    if (userEmail) {
-      setSubscription({ id: '1', status: 'active', currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() });
-    }
-    setLoading(false);
-  }, [searchParams]);
+    const loadData = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        router.push("/login");
+        return;
+      }
 
-  const sectors = ['All', 'Aesthetics', 'GP', 'Private Healthcare'];
-  const filtered = filter === 'All' ? allFiles : allFiles.filter(f => f.sector === filter);
+      const currentUser = sessionData.session.user;
+      setUser(currentUser);
 
-  if (loading) return <div className="min-h-screen bg-[#0f172a] flex items-center justify-center"><div className="text-[#d4a843] text-lg">Loading...</div></div>;
+      const isSubscriptionActive = currentUser.user_metadata?.subscription_active || false;
+      const purchasedBundles = currentUser.user_metadata?.purchased_bundles || [];
+      const purchasedDocuments = currentUser.user_metadata?.purchased_documents || [];
 
-  if (!subscription) {
-    return (
-      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-[#d4a843]/20 rounded-full flex items-center justify-center mx-auto mb-6"><span className="text-[#d4a843] text-2xl">🔒</span></div>
-          <h1 className="text-3xl font-bold text-white mb-3">Not Subscribed</h1>
-          <p className="text-slate-400 mb-8">Subscribe to access your compliance templates</p>
-          <button onClick={() => router.push('/subscription')} className="bg-[#d4a843] hover:bg-[#c49a3a] text-[#0f172a] px-8 py-3 rounded-lg font-bold transition">Subscribe Now</button>
-        </div>
-      </div>
-    );
-  }
+      setSubscription(isSubscriptionActive);
+      setBundles(purchasedBundles);
+      setIndividualDocs(purchasedDocuments);
+
+      // Build document list
+      const docs: Document[] = [];
+
+      // Subscription gives access to all
+      if (isSubscriptionActive) {
+        docs.push(
+          ...driveFiles.adhd.policies.map((f) => ({
+            id: f.id,
+            name: f.name,
+            type: "policy" as const,
+            sector: "adhd" as Sector,
+            source: "subscription" as const,
+          })),
+          ...driveFiles.adhd.riskAssessments.map((f) => ({
+            id: f.id,
+            name: f.name,
+            type: "ra" as const,
+            sector: "adhd" as Sector,
+            source: "subscription" as const,
+          })),
+          ...driveFiles.weightLoss.policies.map((f) => ({
+            id: f.id,
+            name: f.name,
+            type: "policy" as const,
+            sector: "weightLoss" as Sector,
+            source: "subscription" as const,
+          })),
+          ...driveFiles.weightLoss.riskAssessments.map((f) => ({
+            id: f.id,
+            name: f.name,
+            type: "ra" as const,
+            sector: "weightLoss" as Sector,
+            source: "subscription" as const,
+          })),
+          ...driveFiles.telehealth.policies.map((f) => ({
+            id: f.id,
+            name: f.name,
+            type: "policy" as const,
+            sector: "telehealth" as Sector,
+            source: "subscription" as const,
+          })),
+          ...driveFiles.telehealth.riskAssessments.map((f) => ({
+            id: f.id,
+            name: f.name,
+            type: "ra" as const,
+            sector: "telehealth" as Sector,
+            source: "subscription" as const,
+          }))
+        );
+      } else {
+        // Bundle access
+        if (purchasedBundles.includes("adhd")) {
+          docs.push(
+            ...driveFiles.adhd.policies.map((f) => ({
+              id: f.id,
+              name: f.name,
+              type: "policy" as const,
+              sector: "adhd" as Sector,
+              source: "bundle" as const,
+            })),
+            ...driveFiles.adhd.riskAssessments.map((f) => ({
+              id: f.id,
+              name: f.name,
+              type: "ra" as const,
+              sector: "adhd" as Sector,
+              source: "bundle" as const,
+            }))
+          );
+        }
+
+        if (purchasedBundles.includes("weightLoss")) {
+          docs.push(
+            ...driveFiles.weightLoss.policies.map((f) => ({
+              id: f.id,
+              name: f.name,
+              type: "policy" as const,
+              sector: "weightLoss" as Sector,
+              source: "bundle" as const,
+            })),
+            ...driveFiles.weightLoss.riskAssessments.map((f) => ({
+              id: f.id,
+              name: f.name,
+              type: "ra" as const,
+              sector: "weightLoss" as Sector,
+              source: "bundle" as const,
+            }))
+          );
+        }
+
+        if (purchasedBundles.includes("telehealth")) {
+          docs.push(
+            ...driveFiles.telehealth.policies.map((f) => ({
+              id: f.id,
+              name: f.name,
+              type: "policy" as const,
+              sector: "telehealth" as Sector,
+              source: "bundle" as const,
+            })),
+            ...driveFiles.telehealth.riskAssessments.map((f) => ({
+              id: f.id,
+              name: f.name,
+              type: "ra" as const,
+              sector: "telehealth" as Sector,
+              source: "bundle" as const,
+            }))
+          );
+        }
+
+        // Individual purchases
+        purchasedDocuments.forEach((docId: string) => {
+          const allDocs = [
+            ...driveFiles.adhd.policies,
+            ...driveFiles.adhd.riskAssessments,
+            ...driveFiles.weightLoss.policies,
+            ...driveFiles.weightLoss.riskAssessments,
+            ...driveFiles.telehealth.policies,
+            ...driveFiles.telehealth.riskAssessments,
+          ];
+
+          const found = allDocs.find((d) => d.id === docId);
+          if (found) {
+            const sector = purchasedDocuments.some((id: string) =>
+              driveFiles.adhd.policies.concat(driveFiles.adhd.riskAssessments).some((d) => d.id === id)
+            )
+              ? "adhd"
+              : purchasedDocuments.some((id: string) =>
+                  driveFiles.weightLoss.policies.concat(driveFiles.weightLoss.riskAssessments).some((d) => d.id === id)
+                )
+                ? "weightLoss"
+                : "telehealth";
+
+            const isPolicy = driveFiles.adhd.policies
+              .concat(driveFiles.weightLoss.policies, driveFiles.telehealth.policies)
+              .some((d) => d.id === docId);
+
+            docs.push({
+              id: docId,
+              name: found.name,
+              type: isPolicy ? "policy" : "ra",
+              sector: sector as Sector,
+              source: "individual",
+            });
+          }
+        });
+      }
+
+      setDocuments(docs);
+      setLoading(false);
+    };
+
+    loadData();
+  }, [router]);
+
+  if (loading) return <div className="p-8 text-center text-slate-600">Loading...</div>;
+  if (!user) return null;
+
+  const sectorLabels: Record<Sector, string> = {
+    adhd: "ADHD Clinics",
+    weightLoss: "Weight Loss Clinics",
+    telehealth: "Telehealth Services",
+  };
+
+  const sourceLabels: Record<string, { label: string; color: string }> = {
+    subscription: { label: "Subscription", color: "bg-purple-100 text-purple-700" },
+    bundle: { label: "Bundle", color: "bg-blue-100 text-blue-700" },
+    individual: { label: "Individual", color: "bg-green-100 text-green-700" },
+  };
+
+  const groupedBySector = documents.reduce(
+    (acc, doc) => {
+      if (!acc[doc.sector]) acc[doc.sector] = [];
+      acc[doc.sector].push(doc);
+      return acc;
+    },
+    {} as Record<Sector, Document[]>
+  );
 
   return (
-    <div className="min-h-screen bg-[#0f172a]">
-      {/* Nav */}
-      <nav className="border-b border-slate-700/50 bg-[#0f172a]/95 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <button onClick={() => router.push('/')} className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#d4a843] rounded-lg flex items-center justify-center text-[#0f172a] font-bold text-sm">BS</div>
-            <div>
-              <div className="text-white font-bold text-lg tracking-tight">BarkerScott</div>
-              <div className="text-slate-400 text-xs tracking-widest uppercase">CQC Compliance</div>
+    <div className="min-h-screen bg-slate-50 p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">My Account</h1>
+          <p className="text-slate-600">{user.email}</p>
+        </div>
+
+        {/* Status Cards */}
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-slate-600 text-sm font-medium">Subscription Status</p>
+            <p className="text-2xl font-bold text-slate-900 mt-2">
+              {subscription ? (
+                <span className="text-green-600">Active</span>
+              ) : (
+                <span className="text-slate-600">Inactive</span>
+              )}
+            </p>
+            {!subscription && (
+              <a href="/pricing" className="text-blue-600 hover:underline text-sm mt-2 inline-block">
+                Upgrade to subscription
+              </a>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-slate-600 text-sm font-medium">Bundles Purchased</p>
+            <p className="text-2xl font-bold text-slate-900 mt-2">{bundles.length}</p>
+            {bundles.length === 0 && (
+              <a href="/bundles" className="text-blue-600 hover:underline text-sm mt-2 inline-block">
+                Browse bundles
+              </a>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg border border-slate-200 p-6">
+            <p className="text-slate-600 text-sm font-medium">Total Documents</p>
+            <p className="text-2xl font-bold text-slate-900 mt-2">{documents.length}</p>
+          </div>
+        </div>
+
+        {/* Documents */}
+        {documents.length === 0 ? (
+          <div className="bg-white rounded-lg p-12 text-center border border-slate-200">
+            <p className="text-slate-600 mb-6">No documents yet. Start with a bundle or individual purchase.</p>
+            <div className="flex gap-4 justify-center">
+              <a href="/bundles" className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Browse Bundles
+              </a>
+              <a href="/store" className="px-6 py-2 bg-slate-200 text-slate-900 rounded hover:bg-slate-300">
+                Visit Store
+              </a>
             </div>
-          </button>
-          <div className="flex items-center gap-4">
-            <button onClick={() => router.push('/policies')} className="text-slate-300 hover:text-white text-sm">Templates</button>
-            <button onClick={() => { localStorage.removeItem('userEmail'); router.push('/'); }} className="text-slate-400 hover:text-red-400 text-sm">Logout</button>
           </div>
-        </div>
-      </nav>
-
-      {/* Header */}
-      <div className="bg-[#1e293b] py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <p className="text-[#d4a843] text-sm font-semibold tracking-widest uppercase mb-3">Your Account</p>
-          <h1 className="text-4xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-slate-300">{email}</p>
-          <div className="mt-6 inline-flex items-center gap-2 bg-emerald-900/30 border border-emerald-700/50 px-4 py-2 rounded-lg">
-            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-            <span className="text-emerald-300 text-sm font-medium">Active Subscription</span>
-            <span className="text-slate-400 text-sm ml-2">Renews {new Date(subscription.currentPeriodEnd).toLocaleDateString()}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Filter */}
-        <div className="flex flex-wrap gap-3 mb-10">
-          {sectors.map((sector) => (
-            <button key={sector} onClick={() => setFilter(sector)} className={`px-5 py-2 rounded-lg text-sm font-semibold transition ${filter === sector ? 'bg-[#d4a843] text-[#0f172a]' : 'bg-[#1e293b] text-slate-300 border border-slate-600 hover:border-[#d4a843]'}`}>
-              {sector} ({allFiles.filter(f => sector === 'All' ? true : f.sector === sector).length})
-            </button>
-          ))}
-        </div>
-
-        {/* Files Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filtered.map((file) => (
-            <a key={file.id} href={`https://drive.google.com/file/d/${file.id}/view`} target="_blank" rel="noopener noreferrer" className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 hover:border-[#d4a843] transition group">
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 bg-[#d4a843]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-[#d4a843]">📄</span>
+        ) : (
+          <div className="grid gap-8">
+            {Object.entries(groupedBySector).map(([sector, sectorDocs]) => (
+              <div key={sector} className="bg-white rounded-lg border border-slate-200 p-6">
+                <h2 className="text-xl font-semibold text-slate-900 mb-4">{sectorLabels[sector as Sector]}</h2>
+                <div className="grid gap-3">
+                  {sectorDocs.map((doc) => (
+                    <div
+                      key={doc.id}
+                      className="flex items-center justify-between p-4 bg-slate-50 rounded border border-slate-200 hover:bg-slate-100"
+                    >
+                      <div className="flex-1">
+                        <p className="font-medium text-slate-900">{doc.name}</p>
+                        <div className="flex gap-2 mt-2">
+                          <span className="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded">
+                            {doc.type === "policy" ? "Policy" : "Risk Assessment"}
+                          </span>
+                          <span className={`text-xs px-2 py-1 rounded ${sourceLabels[doc.source].color}`}>
+                            {sourceLabels[doc.source].label}
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => downloadFile(doc.id, doc.name)}
+                        className="ml-4 px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 flex-shrink-0"
+                      >
+                        Download
+                      </button>
+                    </div>
+                  ))}
                 </div>
-                <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">{file.sector}</span>
               </div>
-              <h3 className="font-semibold text-white text-sm mb-4 group-hover:text-[#d4a843] transition">{file.name}</h3>
-              <div className="flex items-center gap-2 text-[#d4a843] text-xs font-semibold">
-                <span>Download</span>
-                <span>→</span>
-              </div>
-            </a>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      <footer className="border-t border-slate-700/50 py-8">
-        <p className="text-center text-slate-500 text-sm">© 2026 BarkerScott. All rights reserved.</p>
-      </footer>
     </div>
   );
 }
 
-export default function AccountPage() {
-  return <Suspense fallback={<div className="min-h-screen bg-[#0f172a] flex items-center justify-center"><div className="text-[#d4a843]">Loading...</div></div>}><AccountContent /></Suspense>;
+async function downloadFile(fileId: string, fileName: string) {
+  const { downloadDriveFile } = await import("@/lib/googleDrive");
+  try {
+    await downloadDriveFile(fileId, fileName);
+  } catch (error) {
+    alert("Download failed: " + (error as Error).message);
+  }
 }
