@@ -1,377 +1,101 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    sector: '',
-    message: '',
-  });
+  const router = useRouter();
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: any) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      // Submit to your form handler (e.g., Formspree, etc.)
-      console.log('Form submitted:', formData);
-      setSubmitted(true);
-      setFormData({ name: '', email: '', phone: '', sector: '', message: '' });
-      setTimeout(() => setSubmitted(false), 5000);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
+    setSubmitted(true);
   };
 
   return (
-    <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", color: '#1a1a1a' }}>
-      {/* HEADER */}
-      <header style={{
-        backgroundColor: 'rgba(255,255,255,0.95)',
-        borderBottom: '1px solid #f0f0f0',
-        position: 'sticky',
-        top: 0,
-        zIndex: 40,
-        backdropFilter: 'blur(10px)'
-      }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer' }}>
-              <div style={{ backgroundColor: '#0B1D3A', color: '#D4AF37', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '18px' }}>BS</div>
-              <div>
-                <div style={{ fontWeight: '700', color: '#0B1D3A', fontSize: '16px' }}>BarkerScott</div>
-                <div style={{ fontSize: '11px', color: '#999', fontWeight: '600', letterSpacing: '0.05em' }}>CONSULTANCY</div>
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <button style={{
-              backgroundColor: '#f0f0f0',
-              color: '#0B1D3A',
-              padding: '0.75rem 1.5rem',
-              border: 'none',
-              borderRadius: '6px',
-              fontWeight: '600',
-              fontSize: '14px',
-              cursor: 'pointer'
-            }}>
-              ← Home
-            </button>
-          </Link>
-        </div>
-      </header>
-
-      {/* HERO */}
-      <section style={{ backgroundColor: '#0B1D3A', color: '#fff', padding: '3rem 1.5rem', textAlign: 'center' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '1rem' }}>
-            BarkerScott CQC Consultancy
-          </h1>
-          <p style={{ fontSize: '18px', color: '#d1d5db', marginBottom: '2rem', lineHeight: '1.6' }}>
-            Expert guidance on CQC compliance, policy implementation, and healthcare governance. Get in touch with our team.
-          </p>
-        </div>
-      </section>
-
-      {/* MAIN CONTENT */}
-      <section style={{ padding: '3rem 1.5rem' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
-            {/* CONTACT INFO */}
+    <div className="min-h-screen bg-[#0f172a]">
+      <nav className="border-b border-slate-700/50 bg-[#0f172a]/95 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <button onClick={() => router.push('/')} className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#d4a843] rounded-lg flex items-center justify-center text-[#0f172a] font-bold text-sm">BS</div>
             <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1.5rem', color: '#0B1D3A' }}>
-                Get in Touch
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                {[
-                  { icon: '📧', title: 'Email', content: 'info@barker-scott.co.uk', link: 'mailto:info@barker-scott.co.uk' },
-                  { icon: '📞', title: 'Phone', content: '07407 184948', link: 'tel:07407184948' },
-                  { icon: '⏰', title: 'Response Time', content: '24 hours', link: null },
-                  { icon: '🕐', title: 'Hours', content: 'Monday–Friday, 9am–5pm', link: null },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{item.icon}</div>
-                    <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#0B1D3A', marginBottom: '0.25rem' }}>
-                      {item.title}
-                    </h3>
-                    {item.link ? (
-                      <a href={item.link} style={{ fontSize: '16px', color: '#D4AF37', textDecoration: 'none', fontWeight: '600' }}>
-                        {item.content}
-                      </a>
-                    ) : (
-                      <p style={{ fontSize: '16px', color: '#666', margin: 0 }}>{item.content}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <div className="text-white font-bold text-lg tracking-tight">BarkerScott</div>
+              <div className="text-slate-400 text-xs tracking-widest uppercase">CQC Compliance</div>
             </div>
+          </button>
+          <button onClick={() => router.push('/')} className="text-slate-300 hover:text-white text-sm">← Home</button>
+        </div>
+      </nav>
 
-            {/* FORM */}
-            <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1.5rem', color: '#0B1D3A' }}>
-                Send us a Message
-              </h2>
+      <div className="bg-[#1e293b] py-16">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <p className="text-[#d4a843] text-sm font-semibold tracking-widest uppercase mb-4">Get in Touch</p>
+          <h1 className="text-5xl font-bold text-white mb-4">Contact Us</h1>
+          <p className="text-slate-300 text-lg">Have a question? We are here to help.</p>
+        </div>
+      </div>
 
-              {submitted && (
-                <div style={{
-                  backgroundColor: '#e8f5e9',
-                  border: '2px solid #27AE60',
-                  color: '#27AE60',
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  marginBottom: '1rem',
-                  fontWeight: '600'
-                }}>
-                  ✓ Message sent! We'll get back to you within 24 hours.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', color: '#0B1D3A' }}>
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #ddd',
-                      borderRadius: '6px',
-                      fontSize: '16px',
-                      boxSizing: 'border-box'
-                    }}
-                    placeholder="Your name"
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', color: '#0B1D3A' }}>
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #ddd',
-                      borderRadius: '6px',
-                      fontSize: '16px',
-                      boxSizing: 'border-box'
-                    }}
-                    placeholder="your@email.com"
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', color: '#0B1D3A' }}>
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #ddd',
-                      borderRadius: '6px',
-                      fontSize: '16px',
-                      boxSizing: 'border-box'
-                    }}
-                    placeholder="07407 184948"
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', color: '#0B1D3A' }}>
-                    Your Sector
-                  </label>
-                  <select
-                    name="sector"
-                    value={formData.sector}
-                    onChange={handleChange}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #ddd',
-                      borderRadius: '6px',
-                      fontSize: '16px',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    <option value="">Select a sector...</option>
-                    <option value="care-homes">Care Home</option>
-                    <option value="dental">Dental Clinic</option>
-                    <option value="gp">GP Surgery</option>
-                    <option value="aesthetic">Aesthetic Clinic</option>
-                    <option value="private-health">Private Healthcare</option>
-                    <option value="online-doctor">Online Doctor</option>
-                    <option value="weight-loss">Weight Loss Clinic</option>
-                    <option value="adhd">ADHD Clinic</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontWeight: '600', marginBottom: '0.5rem', color: '#0B1D3A' }}>
-                    Message *
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #ddd',
-                      borderRadius: '6px',
-                      fontSize: '16px',
-                      fontFamily: 'inherit',
-                      boxSizing: 'border-box',
-                      resize: 'vertical'
-                    }}
-                    placeholder="Tell us about your needs..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  style={{
-                    padding: '1rem',
-                    backgroundColor: loading ? '#ccc' : '#0B1D3A',
-                    color: '#D4AF37',
-                    border: 'none',
-                    borderRadius: '6px',
-                    fontWeight: '700',
-                    fontSize: '16px',
-                    cursor: loading ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  {loading ? 'Sending...' : '✓ Send Message'}
-                </button>
-              </form>
-            </div>
-          </div>
-
-          {/* SERVICES */}
-          <div style={{ paddingTop: '3rem', borderTop: '1px solid #e5e5e5' }}>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '2rem', color: '#0B1D3A', textAlign: 'center' }}>
-              How We Can Help
-            </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-              gap: '2rem'
-            }}>
+      <div className="max-w-4xl mx-auto px-6 py-16">
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Contact Info */}
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-8">Contact Information</h2>
+            <div className="space-y-6">
               {[
-                { icon: '📋', title: 'Policy Customization', desc: 'Tailor templates to your specific organization' },
-                { icon: '✓', title: 'Compliance Audit', desc: 'Review your current policies for CQC readiness' },
-                { icon: '🎓', title: 'Staff Training', desc: 'Educate your team on policies and procedures' },
-                { icon: '🔄', title: 'Annual Reviews', desc: 'Keep policies updated and compliant' },
-                { icon: '🤝', title: 'Implementation Support', desc: 'Hands-on guidance implementing policies' },
-                { icon: '📊', title: 'Governance Support', desc: 'Assist with governance documentation' },
-              ].map((service, i) => (
-                <div
-                  key={i}
-                  style={{
-                    backgroundColor: '#f9f9f9',
-                    padding: '1.5rem',
-                    borderRadius: '8px',
-                    border: '1px solid #e5e5e5'
-                  }}
-                >
-                  <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{service.icon}</div>
-                  <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '0.5rem', color: '#0B1D3A' }}>
-                    {service.title}
-                  </h3>
-                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>{service.desc}</p>
+                { icon: '📧', label: 'Email', value: 'info@barkerscott.co.uk' },
+                { icon: '📞', label: 'Phone', value: '0800 000 0000' },
+                { icon: '📍', label: 'Location', value: 'United Kingdom' },
+                { icon: '⏰', label: 'Hours', value: 'Mon–Fri 9am–5pm' },
+              ].map((item) => (
+                <div key={item.label} className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-[#d4a843]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span>{item.icon}</span>
+                  </div>
+                  <div>
+                    <p className="text-slate-400 text-sm">{item.label}</p>
+                    <p className="text-white font-medium">{item.value}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section style={{ padding: '3rem 1.5rem', backgroundColor: '#0B1D3A', color: '#fff', textAlign: 'center' }}>
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '1rem', color: '#D4AF37' }}>
-            Ready to Get Compliant?
-          </h2>
-          <p style={{ fontSize: '16px', color: '#d1d5db', marginBottom: '2rem', lineHeight: '1.6' }}>
-            Browse our templates or schedule a consultation with our CQC specialists.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/policies" style={{ textDecoration: 'none' }}>
-              <button style={{
-                backgroundColor: '#D4AF37',
-                color: '#0B1D3A',
-                padding: '1rem 1.5rem',
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: '700',
-                cursor: 'pointer'
-              }}>
-                Browse Templates
-              </button>
-            </Link>
-            <Link href="/" style={{ textDecoration: 'none' }}>
-              <button style={{
-                backgroundColor: 'transparent',
-                color: '#D4AF37',
-                padding: '1rem 1.5rem',
-                border: '2px solid #D4AF37',
-                borderRadius: '6px',
-                fontWeight: '700',
-                cursor: 'pointer'
-              }}>
-                Back Home
-              </button>
-            </Link>
+          {/* Form */}
+          <div>
+            {submitted ? (
+              <div className="bg-emerald-900/30 border border-emerald-700/50 rounded-2xl p-10 text-center">
+                <div className="text-4xl mb-4">✓</div>
+                <h3 className="text-xl font-bold text-emerald-300 mb-2">Message Sent</h3>
+                <p className="text-slate-300">We will get back to you within 24 hours.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label className="text-slate-300 text-sm mb-1 block">Full Name</label>
+                  <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3 bg-[#1e293b] border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#d4a843]" />
+                </div>
+                <div>
+                  <label className="text-slate-300 text-sm mb-1 block">Email</label>
+                  <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-3 bg-[#1e293b] border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#d4a843]" />
+                </div>
+                <div>
+                  <label className="text-slate-300 text-sm mb-1 block">Subject</label>
+                  <input type="text" required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="w-full px-4 py-3 bg-[#1e293b] border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#d4a843]" />
+                </div>
+                <div>
+                  <label className="text-slate-300 text-sm mb-1 block">Message</label>
+                  <textarea required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full px-4 py-3 bg-[#1e293b] border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#d4a843] resize-none" />
+                </div>
+                <button type="submit" className="w-full bg-[#d4a843] hover:bg-[#c49a3a] text-[#0f172a] font-bold py-4 rounded-lg transition text-lg">Send Message</button>
+              </form>
+            )}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* FOOTER */}
-      <footer style={{
-        padding: '2rem 1.5rem',
-        backgroundColor: '#000',
-        color: '#999',
-        textAlign: 'center',
-        fontSize: '13px',
-        borderTop: '1px solid #222'
-      }}>
-        <p>© 2026 BarkerScott Ltd. | CQC Compliance & Consultancy</p>
-        <p style={{ marginTop: '0.5rem' }}>📞 07407 184948 | 📧 info@barker-scott.co.uk</p>
+      <footer className="border-t border-slate-700/50 py-8">
+        <p className="text-center text-slate-500 text-sm">© 2026 BarkerScott. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -10,13 +10,13 @@ interface Subscription {
   currentPeriodEnd: string;
 }
 
-interface File {
+interface FileItem {
   id: string;
   name: string;
   sector: string;
 }
 
-const allFiles: File[] = [
+const allFiles: FileItem[] = [
   { id: '1V5lxLzVUWZ8YuBjsImg0KvfcRIzpOZ5Z', name: 'Adverse Event Management Policy', sector: 'Aesthetics' },
   { id: '1cb4YnTTliMsF8pifkVVYlz3hDq3IBtEV', name: 'Client Safeguarding Policy', sector: 'Aesthetics' },
   { id: '1N3gCE6agR6WZGidrQuKw5AFGLU4cpeXG', name: 'Complaints Policy', sector: 'Aesthetics' },
@@ -91,11 +91,7 @@ function AccountContent() {
     const userEmail = localStorage.getItem('userEmail') || '';
     setEmail(userEmail);
     if (userEmail) {
-      setSubscription({
-        id: '1',
-        status: 'active',
-        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      });
+      setSubscription({ id: '1', status: 'active', currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() });
     }
     setLoading(false);
   }, [searchParams]);
@@ -103,57 +99,91 @@ function AccountContent() {
   const sectors = ['All', 'Aesthetics', 'GP', 'Private Healthcare'];
   const filtered = filter === 'All' ? allFiles : allFiles.filter(f => f.sector === filter);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-[#0f172a] flex items-center justify-center"><div className="text-[#d4a843] text-lg">Loading...</div></div>;
 
   if (!subscription) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Not Subscribed</h1>
-          <button onClick={() => router.push('/subscribe')} className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold">Subscribe Now</button>
+          <div className="w-16 h-16 bg-[#d4a843]/20 rounded-full flex items-center justify-center mx-auto mb-6"><span className="text-[#d4a843] text-2xl">🔒</span></div>
+          <h1 className="text-3xl font-bold text-white mb-3">Not Subscribed</h1>
+          <p className="text-slate-400 mb-8">Subscribe to access your compliance templates</p>
+          <button onClick={() => router.push('/subscription')} className="bg-[#d4a843] hover:bg-[#c49a3a] text-[#0f172a] px-8 py-3 rounded-lg font-bold transition">Subscribe Now</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Account</h1>
-          <p className="text-gray-600 mb-6">Email: <strong>{email}</strong></p>
-          <div className="bg-indigo-50 border-l-4 border-indigo-600 p-4 mb-6">
-            <p className="text-indigo-900 font-semibold">✓ Active Subscription</p>
-            <p className="text-indigo-700">Renews: {new Date(subscription.currentPeriodEnd).toLocaleDateString()}</p>
-          </div>
-          <button onClick={() => { localStorage.removeItem('userEmail'); router.push('/'); }} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Logout</button>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">Filter by Sector</h2>
-          <div className="flex flex-wrap gap-2">
-            {sectors.map((sector) => (
-              <button key={sector} onClick={() => setFilter(sector)} className={`px-4 py-2 rounded-full font-semibold transition ${filter === sector ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}>
-                {sector} ({allFiles.filter(f => sector === 'All' ? true : f.sector === sector).length})
-              </button>
-            ))}
+    <div className="min-h-screen bg-[#0f172a]">
+      {/* Nav */}
+      <nav className="border-b border-slate-700/50 bg-[#0f172a]/95 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <button onClick={() => router.push('/')} className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#d4a843] rounded-lg flex items-center justify-center text-[#0f172a] font-bold text-sm">BS</div>
+            <div>
+              <div className="text-white font-bold text-lg tracking-tight">BarkerScott</div>
+              <div className="text-slate-400 text-xs tracking-widest uppercase">CQC Compliance</div>
+            </div>
+          </button>
+          <div className="flex items-center gap-4">
+            <button onClick={() => router.push('/policies')} className="text-slate-300 hover:text-white text-sm">Templates</button>
+            <button onClick={() => { localStorage.removeItem('userEmail'); router.push('/'); }} className="text-slate-400 hover:text-red-400 text-sm">Logout</button>
           </div>
         </div>
+      </nav>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Header */}
+      <div className="bg-[#1e293b] py-12">
+        <div className="max-w-6xl mx-auto px-6">
+          <p className="text-[#d4a843] text-sm font-semibold tracking-widest uppercase mb-3">Your Account</p>
+          <h1 className="text-4xl font-bold text-white mb-2">Welcome Back</h1>
+          <p className="text-slate-300">{email}</p>
+          <div className="mt-6 inline-flex items-center gap-2 bg-emerald-900/30 border border-emerald-700/50 px-4 py-2 rounded-lg">
+            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+            <span className="text-emerald-300 text-sm font-medium">Active Subscription</span>
+            <span className="text-slate-400 text-sm ml-2">Renews {new Date(subscription.currentPeriodEnd).toLocaleDateString()}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Filter */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {sectors.map((sector) => (
+            <button key={sector} onClick={() => setFilter(sector)} className={`px-5 py-2 rounded-lg text-sm font-semibold transition ${filter === sector ? 'bg-[#d4a843] text-[#0f172a]' : 'bg-[#1e293b] text-slate-300 border border-slate-600 hover:border-[#d4a843]'}`}>
+              {sector} ({allFiles.filter(f => sector === 'All' ? true : f.sector === sector).length})
+            </button>
+          ))}
+        </div>
+
+        {/* Files Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filtered.map((file) => (
-            <a key={file.id} href={`https://drive.google.com/file/d/${file.id}/view`} target="_blank" rel="noopener noreferrer" className="bg-white rounded-lg shadow-lg hover:shadow-xl p-6 transition">
-              <h3 className="font-bold text-gray-900 mb-1">{file.name}</h3>
-              <p className="text-sm text-gray-600 mb-4">{file.sector}</p>
-              <button className="w-full bg-indigo-600 text-white py-2 rounded font-semibold hover:bg-indigo-700">View Download</button>
+            <a key={file.id} href={`https://drive.google.com/file/d/${file.id}/view`} target="_blank" rel="noopener noreferrer" className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 hover:border-[#d4a843] transition group">
+              <div className="flex items-start justify-between mb-3">
+                <div className="w-10 h-10 bg-[#d4a843]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-[#d4a843]">📄</span>
+                </div>
+                <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">{file.sector}</span>
+              </div>
+              <h3 className="font-semibold text-white text-sm mb-4 group-hover:text-[#d4a843] transition">{file.name}</h3>
+              <div className="flex items-center gap-2 text-[#d4a843] text-xs font-semibold">
+                <span>Download</span>
+                <span>→</span>
+              </div>
             </a>
           ))}
         </div>
       </div>
+
+      <footer className="border-t border-slate-700/50 py-8">
+        <p className="text-center text-slate-500 text-sm">© 2026 BarkerScott. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
 
 export default function AccountPage() {
-  return <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}><AccountContent /></Suspense>;
+  return <Suspense fallback={<div className="min-h-screen bg-[#0f172a] flex items-center justify-center"><div className="text-[#d4a843]">Loading...</div></div>}><AccountContent /></Suspense>;
 }
