@@ -18,7 +18,7 @@ interface File {
 }
 
 const allFiles: File[] = [
-  // Aesthetics (10 files)
+  // Aesthetics (20 files)
   { id: '1V5lxLzVUWZ8YuBjsImg0KvfcRIzpOZ5Z', name: 'Adverse Event Management Policy', sector: 'Aesthetics', folder: 'aesthetic policies' },
   { id: '1cb4YnTTliMsF8pifkVVYlz3hDq3IBtEV', name: 'Client Safeguarding Policy', sector: 'Aesthetics', folder: 'aesthetic policies' },
   { id: '1N3gCE6agR6WZGidrQuKw5AFGLU4cpeXG', name: 'Complaints Policy', sector: 'Aesthetics', folder: 'aesthetic policies' },
@@ -40,7 +40,7 @@ const allFiles: File[] = [
   { id: '1IvqL5tO30YT-w7mGkKRA583wf35is1FL', name: 'Platelet Rich Plasma PRP RA', sector: 'Aesthetics', folder: 'Aesthetics risk assessments' },
   { id: '1Dyi1rPRDAXd--RNnM6fIYvqf_AigtmET', name: 'Thread Lift Procedures PDO RA', sector: 'Aesthetics', folder: 'Aesthetics risk assessments' },
   
-  // GP (10 files)
+  // GP (20 files)
   { id: '17git9BUMBA-Ck-cf4AQ6GrT5gTHv_mzl', name: 'Complaints Handling', sector: 'GP', folder: 'GP policies' },
   { id: '1mSvxg7ehkxksGE5sYtatlJOd44T_eWpG', name: 'Consent and Confidentiality', sector: 'GP', folder: 'GP policies' },
   { id: '1Ow3MLi6b1QMtSI4Sjc6UXI2WKdE5azVI', name: 'Data Protection and Information Governance', sector: 'GP', folder: 'GP policies' },
@@ -51,7 +51,6 @@ const allFiles: File[] = [
   { id: '1yL7Dt9UkfeJ5R7JU_u6dSGJn4Gage7z-', name: 'Lone Working', sector: 'GP', folder: 'GP policies' },
   { id: '1PYuOjnaCAihT5JlETSUqrA0SHH68lXm5', name: 'Medicines Management', sector: 'GP', folder: 'GP policies' },
   { id: '13EPkLnPCMew5r5Xec9i6QvVGvcbJereF', name: 'Safeguarding Children and Adults at Risk', sector: 'GP', folder: 'GP policies' },
-  
   { id: '1pBKaLoZvh5C2nB6kG4bqkaCkFqL_s7Y4', name: 'COSHH RA', sector: 'GP', folder: 'GP Risk assessments' },
   { id: '1fT9GJITPl-48gI3mbEIR1IjxG66-5OEG', name: 'Data Protection and Information Governance RA', sector: 'GP', folder: 'GP Risk assessments' },
   { id: '17AuQnawGGL2BtmQQZRC4nHbUYXmqkIF', name: 'Display Screen Equipment DSE RA', sector: 'GP', folder: 'GP Risk assessments' },
@@ -63,7 +62,7 @@ const allFiles: File[] = [
   { id: '1EGGDgCJMXTeNp3ptrfrY4POlxNhJDLx', name: 'Safeguarding Adults and Children RA', sector: 'GP', folder: 'GP Risk assessments' },
   { id: '1wM3_BJSsBSYZpW8n4kyUeu85SjBA1CYS', name: 'Workplace Violence and Aggression RA', sector: 'GP', folder: 'GP Risk assessments' },
   
-  // Private Clinic (10 files)
+  // Private Healthcare (20 files)
   { id: '1iXjjtIjVCxSGAQ0e8R_nIV3mpG6eC-SH', name: 'Business Continuity and Emergency Planning Policy', sector: 'Private Healthcare', folder: 'Private Health Clinic policies' },
   { id: '1VM6-oRPA_uBDkpVTFa2n89add2HzXR9_', name: 'Clinical Governance Policy', sector: 'Private Healthcare', folder: 'Private Health Clinic policies' },
   { id: '19wP8O8wn8GJNGgC_mC-IghBiMHRrQval', name: 'Complaints Handling Policy', sector: 'Private Healthcare', folder: 'Private Health Clinic policies' },
@@ -74,7 +73,6 @@ const allFiles: File[] = [
   { id: '1v1tquuA9jISU1gBPICVlYMWNyK3DdFNR', name: 'Medicines Management Policy', sector: 'Private Healthcare', folder: 'Private Health Clinic policies' },
   { id: '1UmXpFy-AIgSytjnWuakCd-cFr0JksqMa', name: 'Safeguarding Adults Policy', sector: 'Private Healthcare', folder: 'Private Health Clinic policies' },
   { id: '1_Q-V1DZPz-clwYA2DzZiCwsMoDt-vquu', name: 'Staffing and Recruitment Policy', sector: 'Private Healthcare', folder: 'Private Health Clinic policies' },
-  
   { id: '1DEOYNA7c4Zt7tdkP6CO5OQTxcYAyJcs', name: 'COSHH RA', sector: 'Private Healthcare', folder: 'Private Clinic Risk Assessments' },
   { id: '1yFV32hmQM1oE8itUDRDctiiQHjstotpU', name: 'Fire Safety RA', sector: 'Private Healthcare', folder: 'Private Clinic Risk Assessments' },
   { id: '1dTKX2oyjlN8-NmhVBk1w7C1LfOKQqRCH', name: 'Infection Control RA', sector: 'Private Healthcare', folder: 'Private Clinic Risk Assessments' },
@@ -196,7 +194,7 @@ function AccountContent() {
                 <span className="text-2xl">📄</span>
               </div>
               <button className="w-full mt-4 bg-indigo-600 text-white py-2 rounded font-semibold hover:bg-indigo-700">
-                View & Download
+                View Download
               </button>
             </a>
           ))}
