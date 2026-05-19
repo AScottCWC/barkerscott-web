@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { loadStripe } from "@stripe/js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -96,7 +96,7 @@ export default function PricingPage() {
             </div>
             <div className="p-8">
               <div className="mb-8">
-                <span className="text-3xl font-bold text-slate-900">£169.99–£189.99</span>
+                <span className="text-3xl font-bold text-slate-900">£319.96–£359.94</span>
                 <p className="text-slate-600 mt-2">per sector, lifetime access</p>
               </div>
 
@@ -134,51 +134,6 @@ export default function PricingPage() {
                 Browse Bundles
               </Link>
             </div>
-          </div>
-        </div>
-
-        {/* Comparison Table */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-12">
-          <div className="p-8 border-b border-slate-200">
-            <h2 className="text-2xl font-bold text-slate-900">Feature Comparison</h2>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th className="px-8 py-4 text-left font-semibold text-slate-900">Feature</th>
-                  <th className="px-8 py-4 text-center font-semibold text-slate-900">Subscription</th>
-                  <th className="px-8 py-4 text-center font-semibold text-slate-900">Bundles</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                <tr className="hover:bg-slate-50">
-                  <td className="px-8 py-4 text-slate-700">Document Access</td>
-                  <td className="px-8 py-4 text-center">All 88+</td>
-                  <td className="px-8 py-4 text-center">9–10 per sector</td>
-                </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-8 py-4 text-slate-700">Multiple Sectors</td>
-                  <td className="px-8 py-4 text-center">✓</td>
-                  <td className="px-8 py-4 text-center">Buy separately</td>
-                </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-8 py-4 text-slate-700">Monthly Updates</td>
-                  <td className="px-8 py-4 text-center">✓</td>
-                  <td className="px-8 py-4 text-center">One-time only</td>
-                </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-8 py-4 text-slate-700">Lifetime Access</td>
-                  <td className="px-8 py-4 text-center">While subscribed</td>
-                  <td className="px-8 py-4 text-center">✓ Forever</td>
-                </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-8 py-4 text-slate-700">Cancel Anytime</td>
-                  <td className="px-8 py-4 text-center">✓</td>
-                  <td className="px-8 py-4 text-center">N/A</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
 
