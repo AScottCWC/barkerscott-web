@@ -1,8 +1,6 @@
-// app/subscribe/page.tsx
 'use client';
 
 import { useState } from 'react';
-import { loadStripe } from '@stripe/js';
 import { useRouter } from 'next/navigation';
 
 export default function SubscribePage() {
@@ -23,17 +21,9 @@ export default function SubscribePage() {
         body: JSON.stringify({ email }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Checkout failed');
-      }
-
+      if (!res.ok) throw new Error('Checkout failed');
       const { url } = await res.json();
-      
-      // Redirect to Stripe Checkout
-      if (url) {
-        router.push(url);
-      }
+      if (url) router.push(url);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -47,39 +37,28 @@ export default function SubscribePage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Subscribe Now</h1>
         <p className="text-gray-600 mb-6">Access all 100 policies & risk assessments</p>
 
-        {/* Price Card */}
         <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-6 mb-8">
           <div className="text-4xl font-bold text-gray-900">£34.99</div>
           <div className="text-gray-600 mt-1">per month</div>
           <ul className="mt-4 space-y-2 text-sm text-gray-700">
             <li>✓ 100 policies & risk assessments</li>
-            <li>✓ All sectors (Aesthetics, Dental, GP, Care Home, Private Clinic)</li>
+            <li>✓ All sectors</li>
             <li>✓ Monthly updates</li>
             <li>✓ Cancel anytime</li>
           </ul>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubscribe} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-          </div>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="you@example.com"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-              {error}
-            </div>
-          )}
+          {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">{error}</div>}
 
           <button
             type="submit"
@@ -90,9 +69,7 @@ export default function SubscribePage() {
           </button>
         </form>
 
-        <p className="text-center text-xs text-gray-500 mt-4">
-          Secure payment powered by Stripe
-        </p>
+        <p className="text-center text-xs text-gray-500 mt-4">Secure payment powered by Stripe</p>
       </div>
     </div>
   );
