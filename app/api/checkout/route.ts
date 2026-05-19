@@ -1,57 +1,46 @@
+// app/api/checkout/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
 export async function POST(request: NextRequest) {
   try {
-    const secretKey = process.env.STRIPE_SECRET_KEY;
-    
-    if (!secretKey) {
-      console.error('STRIPE_SECRET_KEY environment variable is not set');
-      return NextResponse.json(
-        { error: 'Server configuration error: Missing STRIPE_SECRET_KEY' },
-        { status: 500 }
-      );
+    const { email } = await request.json();
+
+    if (!email) {
+      return NextResponse.json({ error: 'Email required' }, { status: 400 });
     }
 
-    const stripe = new Stripe(secretKey);
-    const body = await request.json();
-    const { cartItems } = body;
-
-    if (!cartItems || cartItems.length === 0) {
-      return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
-    }
-
-    const lineItems = cartItems.map((item: any) => ({
-      price_data: {
-        currency: 'gbp',
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: Math.round(item.price * 100),
-      },
-      quantity: 1,
-    }));
-
+    // Create checkout session for £34.99/month subscription
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: `https://barkerscott-web-coxy.vercel.app/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://barkerscott-web-coxy.vercel.app/policies`,
-      metadata: {
-        cartItems: JSON.stringify(cartItems),
-      },
+      mode: 'subscription',
+      customer_email: email,
+      line_items: [
+        {
+          price_data: {
+            currency: 'gbp',
+            product_data: {
+              name: 'Barker Scott Policies & RAs',
+              description: 'Monthly access to all 100 policies and risk assessments',
+            },
+            unit_amount: 3499, // £34.99 in pence
+            recurring: {
+              interval: 'month',
+              interval_count: 1,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/subscribe`,
     });
 
-    return NextResponse.json({ 
-      sessionId: session.id,
-      url: session.url
-    });
+    return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    console.error('Stripe error:', error.message);
-    return NextResponse.json(
-      { error: error.message || 'Checkout failed' },
-      { status: 500 }
-    );
+    console.error('Checkout error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
