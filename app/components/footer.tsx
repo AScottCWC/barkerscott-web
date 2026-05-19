@@ -58,9 +58,6 @@ export default function Footer() {
               <li className="text-slate-400">ADHD Clinics</li>
               <li className="text-slate-400">Weight Loss Clinics</li>
               <li className="text-slate-400">Telehealth Services</li>
-              <li className="text-slate-400">GP Surgery</li>
-              <li className="text-slate-400">Private Healthcare</li>
-              <li className="text-slate-400">Aesthetics</li>
             </ul>
           </div>
         </div>
