@@ -30,8 +30,9 @@ export async function POST(req: NextRequest) {
 
       let userId_final = userId;
       if (!userId_final && userEmail) {
-        const { data: userData } = await supabase.auth.admin.getUserByEmail(userEmail);
-        userId_final = userData?.user?.id || "";
+        const { data: { users } } = await supabase.auth.admin.listUsers();
+        const userData = users?.find(u => u.email === userEmail);
+        userId_final = userData?.id || "";
       }
 
       if (!userId_final) {
@@ -57,11 +58,11 @@ export async function POST(req: NextRequest) {
         }
 
         const { data: currentUser } = await supabase.auth.admin.getUserById(userId_final);
-        const currentBundles = currentUser?.user_metadata?.purchased_bundles || [];
+        const currentBundles = currentUser?.user?.user_metadata?.purchased_bundles || [];
 
         await supabase.auth.admin.updateUserById(userId_final, {
           user_metadata: {
-            ...currentUser?.user_metadata,
+            ...currentUser?.user?.user_metadata,
             purchased_bundles: [...new Set([...currentBundles, bundleId])],
             last_purchase: new Date().toISOString(),
           },
@@ -102,11 +103,11 @@ export async function POST(req: NextRequest) {
         }
 
         const { data: currentUser } = await supabase.auth.admin.getUserById(userId_final);
-        const purchasedDocs = currentUser?.user_metadata?.purchased_documents || [];
+        const purchasedDocs = currentUser?.user?.user_metadata?.purchased_documents || [];
 
         await supabase.auth.admin.updateUserById(userId_final, {
           user_metadata: {
-            ...currentUser?.user_metadata,
+            ...currentUser?.user?.user_metadata,
             purchased_documents: [...new Set([...purchasedDocs, documentId])],
             last_purchase: new Date().toISOString(),
           },
@@ -135,13 +136,17 @@ export async function POST(req: NextRequest) {
 
       let userId_final = userId;
       if (!userId_final && userEmail) {
-        const { data: userData } = await supabase.auth.admin.getUserByEmail(userEmail);
-        userId_final = userData?.user?.id || "";
+        const { data: { users } } = await supabase.auth.admin.listUsers();
+        const userData = users?.find(u => u.email === userEmail);
+        userId_final = userData?.id || "";
       }
 
       if (userId_final) {
+        const { data: currentUser } = await supabase.auth.admin.getUserById(userId_final);
+        
         await supabase.auth.admin.updateUserById(userId_final, {
           user_metadata: {
+            ...currentUser?.user?.user_metadata,
             subscription_active: true,
             subscription_start: new Date().toISOString(),
             stripe_customer_id: session.customer,
