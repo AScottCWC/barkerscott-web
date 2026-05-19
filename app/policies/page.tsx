@@ -60,56 +60,56 @@ export default function PoliciesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-slate-950 border-b border-slate-700 py-6">
+      <div className="bg-slate-900 text-white py-12">
         <div className="max-w-6xl mx-auto px-4">
-          <button onClick={() => router.push('/')} className="text-amber-500 hover:text-amber-400 mb-6">← Back to Home</button>
-          <h1 className="text-5xl font-bold text-white mb-2">Compliance Templates</h1>
-          <p className="text-slate-300">Professional policies and risk assessments for healthcare services</p>
+          <button onClick={() => router.push('/')} className="text-amber-500 hover:text-amber-400 mb-6 font-semibold">← Back</button>
+          <h1 className="text-5xl font-bold mb-3">Compliance Templates</h1>
+          <p className="text-slate-300 text-lg">Professional policies and risk assessments for healthcare services</p>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-4 py-16">
         {/* Sector Selection */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Select Your Sector</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8">Select Your Sector</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {sectors.map((sector) => (
               <button
                 key={sector.id}
                 onClick={() => setSelectedSector(sector.id)}
                 className={`p-8 rounded-lg border-2 transition text-center ${
                   selectedSector === sector.id
-                    ? 'border-amber-500 bg-slate-800'
-                    : 'border-slate-700 bg-slate-800 hover:border-amber-400'
+                    ? 'border-amber-500 bg-amber-50'
+                    : 'border-slate-200 bg-white hover:border-amber-400'
                 }`}
               >
-                <div className="text-5xl mb-3">{sector.icon}</div>
-                <div className="text-xl font-semibold text-white">{sector.name}</div>
+                <div className="text-5xl mb-4">{sector.icon}</div>
+                <div className="text-xl font-semibold text-slate-900">{sector.name}</div>
               </button>
             ))}
           </div>
         </div>
 
         {/* Templates Grid */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">Available Templates</h2>
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold text-slate-900 mb-8">Available Templates</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {currentTemplates.map((template) => (
-              <div key={template.id} className="bg-slate-800 border border-slate-700 rounded-lg p-6 hover:border-amber-500 transition">
+              <div key={template.id} className="bg-white border border-slate-200 rounded-lg p-6 hover:shadow-lg transition">
                 <div className="flex justify-between items-start mb-4">
-                  <h3 className="font-semibold text-white flex-1 text-lg">{template.name}</h3>
+                  <h3 className="font-semibold text-slate-900 flex-1 text-base">{template.name}</h3>
                 </div>
-                <span className="text-xs font-semibold text-amber-500 bg-slate-700 px-3 py-1 rounded inline-block mb-4">
+                <span className="text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded inline-block mb-4">
                   {template.type}
                 </span>
                 <div className="mb-6">
-                  <span className="text-3xl font-bold text-amber-500">£{template.price.toFixed(2)}</span>
+                  <span className="text-3xl font-bold text-slate-900">£{template.price.toFixed(2)}</span>
                 </div>
                 <button
                   onClick={() => handleAddToCart(template.id)}
-                  className="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-3 rounded transition"
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded transition"
                 >
                   Add to Cart
                 </button>
@@ -119,20 +119,18 @@ export default function PoliciesPage() {
         </div>
 
         {/* Cart Summary */}
-        <div className="bg-slate-800 border border-amber-500 rounded-lg p-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2">Cart: {cart.length} item{cart.length !== 1 ? 's' : ''}</h3>
-              <p className="text-slate-400">Or subscribe for all-access at <span className="text-amber-500 font-bold">£349.99/month</span></p>
-            </div>
-            <button
-              onClick={handleCheckout}
-              disabled={cart.length === 0}
-              className="bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-slate-900 px-8 py-4 rounded-lg font-bold text-lg transition"
-            >
-              Checkout
-            </button>
+        <div className="bg-slate-900 text-white rounded-lg p-8 flex justify-between items-center">
+          <div>
+            <h3 className="text-2xl font-bold mb-1">Cart: {cart.length} item{cart.length !== 1 ? 's' : ''}</h3>
+            <p className="text-slate-300">Or subscribe for all-access at <span className="text-amber-500 font-bold">£349.99/month</span></p>
           </div>
+          <button
+            onClick={handleCheckout}
+            disabled={cart.length === 0}
+            className="bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-slate-900 px-8 py-4 rounded-lg font-bold text-lg transition"
+          >
+            Checkout
+          </button>
         </div>
       </div>
     </div>
