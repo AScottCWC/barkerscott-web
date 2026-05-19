@@ -23,7 +23,7 @@ export default function BundlesPage() {
       });
       const { sessionId } = await response.json();
       const stripe = await stripePromise;
-      await stripe?.redirectToCheckout({ sessionId });
+      window.location.href = `https://checkout.stripe.com/pay/${sessionId}`;
     } catch (error) {
       alert("Error: " + (error as Error).message);
       setPurchasing(null);
