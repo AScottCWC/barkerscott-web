@@ -11,11 +11,6 @@ export default function PoliciesPage() {
   const [email, setEmail] = useState<string>('');
 
   const handleCheckout = async (productId: string, productName: string, price: number, sector: string): Promise<void> => {
-    if (!email.trim()) {
-      alert('Please enter a valid email');
-      return;
-    }
-
     setLoading(productId);
 
     try {
@@ -27,7 +22,7 @@ export default function PoliciesPage() {
           productName,
           price,
           sector,
-          customerEmail: email,
+          customerEmail: email || 'customer@barkerscott.co.uk',
         }),
       });
 
@@ -234,8 +229,8 @@ export default function PoliciesPage() {
       <section style={{ padding: '2rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
           <div>
-            <label style={{ fontSize: '12px', fontWeight: '700', color: '#0B1D3A', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Email</label>
-            <input type="email" placeholder="info@barker-scott.co.uk" value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }} />
+            <label style={{ fontSize: '12px', fontWeight: '700', color: '#0B1D3A', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Email (optional)</label>
+            <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }} />
           </div>
           <div>
             <label style={{ fontSize: '12px', fontWeight: '700', color: '#0B1D3A', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Search</label>
@@ -250,8 +245,8 @@ export default function PoliciesPage() {
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-            <button onClick={() => handleCheckout(`bundle-${selectedSector}`, `${current.name} Bundle`, current.bundlePrice, current.name)} disabled={!email.trim()} style={{ width: '100%', backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '0.75rem', border: 'none', borderRadius: '6px', fontWeight: '700', cursor: email.trim() ? 'pointer' : 'not-allowed', opacity: email.trim() ? 1 : 0.5 }}>
-              🎁 Bundle £{current.bundlePrice}
+            <button onClick={() => handleCheckout(`bundle-${selectedSector}`, `${current.name} Bundle`, current.bundlePrice, current.name)} disabled={loading !== null} style={{ width: '100%', backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '0.75rem', border: 'none', borderRadius: '6px', fontWeight: '700', cursor: loading === null ? 'pointer' : 'not-allowed', opacity: loading === null ? 1 : 0.5 }}>
+              {loading === `bundle-${selectedSector}` ? '⏳' : `🎁 Bundle £${current.bundlePrice}`}
             </button>
           </div>
         </div>
@@ -272,7 +267,7 @@ export default function PoliciesPage() {
                   <p style={{ fontSize: '13px', color: '#666', margin: '0 0 1.5rem 0', flex: 1 }}>{item.desc}</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #e5e5e5' }}>
                     <div style={{ fontSize: '18px', fontWeight: '700', color: '#D4AF37' }}>£{item.price}</div>
-                    <button onClick={() => handleCheckout(item.id, item.name, item.price, current.name)} disabled={!email.trim() || loading === item.id} style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '1px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', fontSize: '13px', cursor: email.trim() && loading !== item.id ? 'pointer' : 'not-allowed', opacity: email.trim() && loading !== item.id ? 1 : 0.5 }}>
+                    <button onClick={() => handleCheckout(item.id, item.name, item.price, current.name)} disabled={loading !== null} style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '1px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', fontSize: '13px', cursor: loading === null ? 'pointer' : 'not-allowed', opacity: loading === null ? 1 : 0.5 }}>
                       {loading === item.id ? '⏳' : 'Add'}
                     </button>
                   </div>
