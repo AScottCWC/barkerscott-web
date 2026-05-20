@@ -137,8 +137,8 @@ async function handleSubscriptionUpdated(event: Stripe.Event) {
       customer_email: email,
       stripe_subscription_id: subscription.id,
       status: subscription.status,
-      current_period_start: new Date(subscription.current_period_start * 1000),
-      current_period_end: new Date(subscription.current_period_end * 1000),
+      current_period_start: new Date((subscription as any).current_period_start! * 1000),
+      current_period_end: new Date((subscription as any).current_period_end! * 1000),
       cancel_at_period_end: subscription.cancel_at_period_end || false,
     }, {
       onConflict: 'customer_email'
