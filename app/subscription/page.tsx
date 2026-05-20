@@ -83,10 +83,11 @@ export default function SubscriptionPage() {
               <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0B1D3A', marginBottom: '1rem' }}>
                 What's Included:
               </h3>
+              <p style={{ fontSize: '13px', color: '#999', marginBottom: '1rem', fontStyle: 'italic' }}>
+                Updates to the policies & RAs you've already purchased (via bundles or individual items)
+              </p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {[
-                  'All 70+ CQC policies across every sector',
-                  'All 60+ risk assessments',
                   'Automatic updates every 3 months when regulations change',
                   'Full explanations of what changed and why',
                   'Monthly compliance newsletters',
@@ -144,8 +145,8 @@ export default function SubscriptionPage() {
               },
               {
                 icon: '🎯',
-                title: 'All Sectors',
-                desc: 'One subscription covers all 70+ policies and 60+ RAs across every sector—Aesthetic, GP, Private Healthcare, ADHD, Weight Loss, Telehealth.'
+                title: 'Updates to What You Own',
+                desc: 'The subscription keeps your purchased templates current. Buy a bundle or individual items first, then add subscription for ongoing updates.'
               },
               {
                 icon: '⭐',
