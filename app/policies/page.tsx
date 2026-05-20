@@ -4,13 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 export default function PoliciesPage() {
-  const [selectedSector, setSelectedSector] = useState('aesthetic');
-  const [selectedType, setSelectedType] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(null);
-  const [email, setEmail] = useState('');
+  const [selectedSector, setSelectedSector] = useState<string>('aesthetic');
+  const [selectedType, setSelectedType] = useState<'all' | 'policy' | 'ra'>('all');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [loading, setLoading] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>('');
 
-  const handleCheckout = async (productId, productName, price, sector) => {
+  const handleCheckout = async (productId: string, productName: string, price: number, sector: string): Promise<void> => {
     if (!email.trim()) {
       alert('Please enter a valid email');
       return;
@@ -41,12 +41,29 @@ export default function PoliciesPage() {
 
       window.location.href = `https://checkout.stripe.com/pay/${result.sessionId}`;
     } catch (error) {
-      alert(`Checkout error: ${error.message}`);
+      alert(`Checkout error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setLoading(null);
     }
   };
 
-  const products = {
+  interface Product {
+    id: string;
+    name: string;
+    price: number;
+    type: 'policy' | 'ra';
+    desc: string;
+  }
+
+  interface Sector {
+    name: string;
+    icon: string;
+    bundlePrice: number;
+    items: Product[];
+  }
+
+  type SectorKey = 'aesthetic' | 'gp' | 'private-health' | 'adhd' | 'weightloss' | 'telehealth';
+
+  const products: Record<SectorKey, Sector> = {
     aesthetic: {
       name: 'Aesthetic Clinic',
       icon: '✨',
@@ -158,7 +175,7 @@ export default function PoliciesPage() {
     }
   };
 
-  const current = products[selectedSector];
+  const current = products[selectedSector as SectorKey];
   const filtered = current.items.filter(item => {
     const typeMatch = selectedType === 'all' || item.type === selectedType;
     const searchMatch = !searchTerm || item.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -170,7 +187,6 @@ export default function PoliciesPage() {
 
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', minHeight: '100vh', backgroundColor: '#f9f9f9' }}>
-      {/* HEADER */}
       <header style={{ backgroundColor: '#0B1D3A', color: '#fff', padding: '2rem 1.5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
@@ -188,7 +204,6 @@ export default function PoliciesPage() {
         </div>
       </header>
 
-      {/* HERO */}
       <section style={{ padding: '3rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#0B1D3A', margin: '0 0 0.5rem 0' }}>Templates for {current.name}</h1>
@@ -196,7 +211,6 @@ export default function PoliciesPage() {
         </div>
       </section>
 
-      {/* TABS */}
       <section style={{ padding: '2rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '1rem', overflowX: 'auto' }}>
           {Object.entries(products).map(([key, sector]) => (
@@ -217,7 +231,6 @@ export default function PoliciesPage() {
         </div>
       </section>
 
-      {/* FILTERS */}
       <section style={{ padding: '2rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
           <div>
@@ -230,7 +243,7 @@ export default function PoliciesPage() {
           </div>
           <div>
             <label style={{ fontSize: '12px', fontWeight: '700', color: '#0B1D3A', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Type</label>
-            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '6px', fontSize: '14px' }}>
+            <select value={selectedType} onChange={(e) => setSelectedType(e.target.value as 'all' | 'policy' | 'ra')} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '6px', fontSize: '14px' }}>
               <option value="all">All ({current.items.length})</option>
               <option value="policy">Policies ({policyCount})</option>
               <option value="ra">Risk Assessments ({raCount})</option>
@@ -244,7 +257,6 @@ export default function PoliciesPage() {
         </div>
       </section>
 
-      {/* PRODUCTS */}
       <section style={{ padding: '3rem 1.5rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {filtered.length === 0 ? (
@@ -271,7 +283,6 @@ export default function PoliciesPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer style={{ padding: '2rem 1.5rem', backgroundColor: '#000', color: '#999', textAlign: 'center', fontSize: '13px', borderTop: '1px solid #222' }}>
         <p>© 2026 BarkerScott Ltd. All rights reserved.</p>
       </footer>
