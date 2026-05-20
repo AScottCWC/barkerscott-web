@@ -2,43 +2,19 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useCart } from '@/app/context/CartContext';
 
 export default function PoliciesPage() {
   const [selectedSector, setSelectedSector] = useState<string>('aesthetic');
   const [selectedType, setSelectedType] = useState<'all' | 'policy' | 'ra'>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [loading, setLoading] = useState<string | null>(null);
-  const [email, setEmail] = useState<string>('');
+  const [toast, setToast] = useState<string>('');
+  const { cart, addToCart } = useCart();
 
-  const handleCheckout = async (productId: string, productName: string, price: number, sector: string): Promise<void> => {
-    setLoading(productId);
-
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          productId,
-          productName,
-          price,
-          sector,
-          customerEmail: email || 'customer@barkerscott.co.uk',
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        alert(`Error: ${result.error || 'Checkout failed'}`);
-        setLoading(null);
-        return;
-      }
-
-      window.location.href = `https://checkout.stripe.com/pay/${result.sessionId}`;
-    } catch (error) {
-      alert(`Checkout error: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      setLoading(null);
-    }
+  const handleAddToCart = (id: string, name: string, price: number, type: string, sector: string) => {
+    addToCart({ id, name, price, type, sector });
+    setToast(`${name} added to cart`);
+    setTimeout(() => setToast(''), 2000);
   };
 
   interface Product {
@@ -182,8 +158,8 @@ export default function PoliciesPage() {
 
   return (
     <div style={{ fontFamily: 'Inter, sans-serif', minHeight: '100vh', backgroundColor: '#f9f9f9' }}>
-      <header style={{ backgroundColor: '#0B1D3A', color: '#fff', padding: '2rem 1.5rem' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <header style={{ backgroundColor: '#0B1D3A', color: '#fff', padding: '2rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <div style={{ backgroundColor: '#D4AF37', color: '#0B1D3A', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>BS</div>
@@ -193,16 +169,29 @@ export default function PoliciesPage() {
               </div>
             </div>
           </Link>
-          <Link href="/">
-            <button style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '2px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', cursor: 'pointer' }}>← Back</button>
-          </Link>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Link href="/cart" style={{ textDecoration: 'none' }}>
+              <button style={{ backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', border: 'none', position: 'relative' }}>
+                🛒 Cart {cart.length > 0 && <span style={{ position: 'absolute', top: '-8px', right: '-8px', backgroundColor: '#ff6b6b', color: '#fff', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '700' }}>{cart.length}</span>}
+              </button>
+            </Link>
+            <Link href="/">
+              <button style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '2px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', cursor: 'pointer' }}>← Back</button>
+            </Link>
+          </div>
         </div>
       </header>
+
+      {toast && (
+        <div style={{ backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '1rem 1.5rem', textAlign: 'center', fontWeight: '600' }}>
+          {toast}
+        </div>
+      )}
 
       <section style={{ padding: '3rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h1 style={{ fontSize: '32px', fontWeight: '700', color: '#0B1D3A', margin: '0 0 0.5rem 0' }}>Templates for {current.name}</h1>
-          <p style={{ fontSize: '16px', color: '#666', margin: 0 }}>{policyCount} policies + {raCount} RAs | Bundle: £{current.bundlePrice}</p>
+          <p style={{ fontSize: '16px', color: '#666', margin: 0 }}>{policyCount} policies + {raCount} RAs</p>
         </div>
       </section>
 
@@ -229,10 +218,6 @@ export default function PoliciesPage() {
       <section style={{ padding: '2rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
           <div>
-            <label style={{ fontSize: '12px', fontWeight: '700', color: '#0B1D3A', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Email (optional)</label>
-            <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }} />
-          </div>
-          <div>
             <label style={{ fontSize: '12px', fontWeight: '700', color: '#0B1D3A', display: 'block', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Search</label>
             <input type="text" placeholder="Find template..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '6px', fontSize: '14px', boxSizing: 'border-box' }} />
           </div>
@@ -243,11 +228,6 @@ export default function PoliciesPage() {
               <option value="policy">Policies ({policyCount})</option>
               <option value="ra">Risk Assessments ({raCount})</option>
             </select>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-            <button onClick={() => handleCheckout(`bundle-${selectedSector}`, `${current.name} Bundle`, current.bundlePrice, current.name)} disabled={loading !== null} style={{ width: '100%', backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '0.75rem', border: 'none', borderRadius: '6px', fontWeight: '700', cursor: loading === null ? 'pointer' : 'not-allowed', opacity: loading === null ? 1 : 0.5 }}>
-              {loading === `bundle-${selectedSector}` ? '⏳' : `🎁 Bundle £${current.bundlePrice}`}
-            </button>
           </div>
         </div>
       </section>
@@ -267,8 +247,8 @@ export default function PoliciesPage() {
                   <p style={{ fontSize: '13px', color: '#666', margin: '0 0 1.5rem 0', flex: 1 }}>{item.desc}</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '1px solid #e5e5e5' }}>
                     <div style={{ fontSize: '18px', fontWeight: '700', color: '#D4AF37' }}>£{item.price}</div>
-                    <button onClick={() => handleCheckout(item.id, item.name, item.price, current.name)} disabled={loading !== null} style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '1px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', fontSize: '13px', cursor: loading === null ? 'pointer' : 'not-allowed', opacity: loading === null ? 1 : 0.5 }}>
-                      {loading === item.id ? '⏳' : 'Add'}
+                    <button onClick={() => handleAddToCart(item.id, item.name, item.price, item.type, current.name)} style={{ backgroundColor: 'transparent', color: '#D4AF37', border: '1px solid #D4AF37', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', fontSize: '13px', cursor: 'pointer' }}>
+                      + Add
                     </button>
                   </div>
                 </div>

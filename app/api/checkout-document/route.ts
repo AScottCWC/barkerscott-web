@@ -1,16 +1,11 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
-    const { documentId, documentName, price, type, sector } = await req.json();
-
-    const { data } = await supabase.auth.getSession();
-    const userId = data?.session?.user?.id;
+    const { productId, productName, price, sector, documentId, type, customerEmail } = await req.json();
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -18,17 +13,20 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: "gbp",
-            product_data: { name: `${documentName} (${type === "policy" ? "Policy" : "Risk Assessment"})` },
+            product_data: {
+              name: productName,
+              description: type ? `${type === "policy" ? "Policy" : "Risk Assessment"} - ${sector}` : sector,
+            },
             unit_amount: Math.round(price * 100),
           },
           quantity: 1,
         },
       ],
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/account?documentPurchased=${documentId}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/store`,
-      metadata: { documentId, documentName, type, sector },
-      client_reference_id: userId,
+      success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/policies`,
+      customer_email: customerEmail,
+      metadata: { productId: productId || documentId, productName, type: type || "template", sector },
     });
 
     return NextResponse.json({ sessionId: session.id });

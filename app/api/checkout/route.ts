@@ -1,72 +1,39 @@
-// app/api/checkout/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { getGoogleDriveFileId } from '@/lib/driveFileMapping';
+import Stripe from "stripe";
+import { NextRequest, NextResponse } from "next/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-interface CheckoutBody {
-  productId: string;
-  productName: string;
-  price: number;
-  sector: string;
-  customerEmail?: string;
-}
-
 export async function POST(req: NextRequest) {
   try {
-    const body: CheckoutBody = await req.json();
-    const { productId, productName, price, sector, customerEmail } = body;
+    const { items } = await req.json();
 
-    if (!productId || !productName || !price) {
-      return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
-      );
+    if (!items || items.length === 0) {
+      return NextResponse.json({ error: "No items in cart" }, { status: 400 });
     }
 
-    const googleDriveFileId = getGoogleDriveFileId(productId);
-
-    if (!googleDriveFileId) {
-      return NextResponse.json(
-        { error: 'Product file not found' },
-        { status: 404 }
-      );
-    }
+    const lineItems = items.map((item: any) => ({
+      price_data: {
+        currency: "gbp",
+        product_data: {
+          name: item.name,
+          description: `${item.type === "policy" ? "Policy" : "Risk Assessment"} - ${item.sector}`,
+        },
+        unit_amount: Math.round(item.price * 100),
+      },
+      quantity: 1,
+    }));
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'gbp',
-            product_data: {
-              name: productName,
-              description: `CQC Compliance Template - ${sector}`,
-            },
-            unit_amount: Math.round(price * 100),
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
       success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/policies?cancelled=true`,
-      customer_email: customerEmail,
-      metadata: {
-        product_id: productId,
-        product_name: productName,
-        google_drive_file_id: googleDriveFileId,
-        sector: sector,
-      },
+      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/cart`,
     });
 
-    return NextResponse.json({ sessionId: session.id, url: session.url });
+    return NextResponse.json({ sessionId: session.id });
   } catch (error) {
-    console.error('Checkout error:', error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    );
+    console.error("Checkout error:", error);
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

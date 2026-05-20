@@ -45,7 +45,7 @@ export default function HomePage() {
                 🔄 Updates
               </button>
             </Link>
-            <Link href="/policies" style={{ textDecoration: 'none' }}>
+            <Link href="/store" style={{ textDecoration: 'none' }}>
               <button style={{ backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '0.625rem 1.25rem', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '14px', cursor: 'pointer', transition: 'all 0.3s' }}>
                 Shop Now
               </button>
@@ -71,7 +71,7 @@ export default function HomePage() {
           </p>
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
-            <Link href="/policies" style={{ textDecoration: 'none' }}>
+            <Link href="/store" style={{ textDecoration: 'none' }}>
               <button style={{ backgroundColor: '#D4AF37', color: '#0B1D3A', padding: '1rem 2rem', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '16px', cursor: 'pointer', transition: 'all 0.3s' }}>
                 ✓ Browse Templates
               </button>
@@ -237,7 +237,7 @@ export default function HomePage() {
                 <p style={{ fontSize: '14px', opacity: 0.9, marginBottom: '1rem' }}>{bundle.items}</p>
                 <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '1rem' }}>{bundle.price}</div>
                 <p style={{ fontSize: '12px', fontWeight: '600', color: '#D4AF37', marginBottom: '1rem' }}>{bundle.save}</p>
-                <Link href="/policies" style={{ textDecoration: 'none', marginTop: 'auto' }}>
+                <Link href="/store" style={{ textDecoration: 'none', marginTop: 'auto' }}>
                   <button style={{
                     width: '100%',
                     backgroundColor: '#D4AF37',
@@ -286,7 +286,7 @@ export default function HomePage() {
               Explore Subscription →
             </button>
           </Link>
-          <Link href="/policies" style={{ textDecoration: 'none' }}>
+          <Link href="/store" style={{ textDecoration: 'none' }}>
             <button style={{
               backgroundColor: 'transparent',
               color: '#D4AF37',
@@ -373,7 +373,7 @@ export default function HomePage() {
               <p style={{ fontSize: '14px', fontWeight: '600', color: '#D4AF37', marginBottom: '1rem' }}>PATH 1</p>
               <p style={{ fontSize: '18px', fontWeight: '700', marginBottom: '0.5rem' }}>Start Now</p>
               <p style={{ fontSize: '14px', color: '#d1d5db', marginBottom: '1.5rem' }}>Browse templates, pick your sector, add to cart</p>
-              <Link href="/policies" style={{ textDecoration: 'none' }}>
+              <Link href="/store" style={{ textDecoration: 'none' }}>
                 <button style={{
                   width: '100%',
                   backgroundColor: '#D4AF37',
@@ -393,7 +393,7 @@ export default function HomePage() {
               <p style={{ fontSize: '18px', fontWeight: '700', marginBottom: '0.5rem' }}>Bundle + Subscribe</p>
               <p style={{ fontSize: '14px', color: '#d1d5db', marginBottom: '0.5rem' }}>Get everything + 10% off subscription</p>
               <p style={{ fontSize: '12px', color: '#D4AF37', fontWeight: '600', marginBottom: '1.5rem' }}>Save 3 months of subscription fees</p>
-              <Link href="/policies" style={{ textDecoration: 'none' }}>
+              <Link href="/store" style={{ textDecoration: 'none' }}>
                 <button style={{
                   width: '100%',
                   backgroundColor: '#D4AF37',
