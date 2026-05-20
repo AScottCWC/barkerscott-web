@@ -7,14 +7,17 @@ export default function HomePage() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const BUNDLES = [
-    { name: 'Aesthetic Clinic Complete', price: '£249.99', save: 'Save £80', items: '6 Templates', sector: 'aesthetic', icon: '✨' },
-    { name: 'GP Surgery Essentials', price: '£219.99', save: 'Save £80', items: '6 Templates', sector: 'gp', icon: '⚕️' },
-    { name: 'Private Healthcare Package', price: '£239.99', save: 'Save £80', items: '5 Templates', sector: 'private-health', icon: '🏥' },
+    { name: 'Aesthetic Clinic Complete', price: '£549.99', save: 'Save £11.85', items: '16 Templates', sector: 'aesthetic', icon: '✨' },
+    { name: 'GP Surgery Essentials', price: '£519.99', save: 'Save £23.85', items: '16 Templates', sector: 'gp', icon: '⚕️' },
+    { name: 'Private Healthcare Package', price: '£579.99', save: 'Save £9.84', items: '17 Templates', sector: 'private-health', icon: '🏥' },
+    { name: 'ADHD Clinic Bundle', price: '£429.99', save: 'Save £15.88', items: '13 Templates', sector: 'adhd', icon: '🧠' },
+    { name: 'Weight Loss Clinic Complete', price: '£559.99', save: 'Save £19.84', items: '17 Templates', sector: 'weightloss', icon: '⚖️' },
+    { name: 'Online/Virtual Clinic Pro', price: '£559.99', save: 'Save £19.84', items: '17 Templates', sector: 'telehealth', icon: '💻' },
   ];
 
   return (
     <div style={{ fontFamily: "'Inter', -apple-system, sans-serif", color: '#1a1a1a' }}>
-      {/* STICKY HEADER - Enhanced */}
+      {/* STICKY HEADER */}
       <header style={{
         backgroundColor: 'rgba(255,255,255,0.95)',
         borderBottom: '1px solid #f0f0f0',
@@ -51,7 +54,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION - Enhanced with Subscription Appeal */}
+      {/* HERO SECTION */}
       <section style={{ backgroundColor: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', backgroundImage: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', color: '#fff', padding: '5rem 1.5rem', textAlign: 'center' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
           <div style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '1rem', textTransform: 'uppercase' }}>
@@ -102,7 +105,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* REGULATORY URGENCY SECTION - NEW */}
+      {/* REGULATORY URGENCY SECTION */}
       <section style={{ padding: '3rem 1.5rem', backgroundColor: '#fff8e6', borderTop: '4px solid #D4AF37' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
           <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0B1D3A', marginBottom: '1rem' }}>
@@ -125,7 +128,7 @@ export default function HomePage() {
             {[
               { icon: '⏱️', pain: 'No Time', solution: 'We handle the research and writing so you don\'t have to' },
               { icon: '🤔', pain: 'Confused About Requirements', solution: 'Every template includes CQC guidance and best practices' },
-              { icon: '💰', pain: 'Can\'t Afford a Consultant', solution: 'Professional templates from just £199.99—not thousands' },
+              { icon: '💰', pain: 'Can\'t Afford a Consultant', solution: 'Professional templates from just £429.99—not thousands' },
               { icon: '🔄', pain: 'Regulations Change Constantly', solution: 'Subscription auto-updates every 3 months—no manual work' },
             ].map((item, i) => (
               <div key={i} style={{
@@ -181,7 +184,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF - SUBSCRIPTION FOCUSED */}
+      {/* SOCIAL PROOF */}
       <section style={{ padding: '4rem 1.5rem', backgroundColor: '#1a1a1a', color: '#fff' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '3rem' }}>
@@ -204,14 +207,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* BUNDLES */}
+      {/* BUNDLES - 6 SECTORS */}
       <section id="pricing" style={{ padding: '4rem 1.5rem', backgroundColor: '#fff' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ fontSize: '2rem', fontWeight: '700', textAlign: 'center', marginBottom: '0.5rem', color: '#0B1D3A' }}>
             Complete Bundles for Every Sector
           </h2>
           <p style={{ textAlign: 'center', color: '#666', marginBottom: '1rem', fontSize: '16px' }}>
-            Each bundle includes 1 free policy + 1 free risk assessment worth £70-£80
+            Each bundle includes everything your sector needs—built on actual CQC requirements
           </p>
           <p style={{ textAlign: 'center', color: '#D4AF37', fontWeight: '600', marginBottom: '3rem', fontSize: '15px' }}>
             💡 Pro tip: Buy a bundle and get 10% off subscription (£31.49/month for 3 months, then £34.99/month)
@@ -254,7 +257,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SUBSCRIPTION SPOTLIGHT - PREMIUM POSITIONING */}
+      {/* SUBSCRIPTION SPOTLIGHT */}
       <section style={{ padding: '4rem 1.5rem', backgroundColor: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', backgroundImage: 'linear-gradient(135deg, #0B1D3A 0%, #1a2f4a 100%)', color: '#fff', textAlign: 'center' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
           <div style={{ fontSize: '13px', fontWeight: '700', letterSpacing: '0.1em', color: '#D4AF37', marginBottom: '1rem', textTransform: 'uppercase' }}>
