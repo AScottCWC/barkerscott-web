@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface CartItem {
   id: string;
@@ -21,28 +21,16 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('barkerscott-cart');
-    if (saved) {
-      setCart(JSON.parse(saved));
-    }
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (hydrated) {
-      localStorage.setItem('barkerscott-cart', JSON.stringify(cart));
-    }
-  }, [cart, hydrated]);
 
   const addToCart = (item: CartItem) => {
     setCart([...cart, item]);
+    localStorage.setItem('barkerscott-cart', JSON.stringify([...cart, item]));
   };
 
   const removeFromCart = (id: string, index: number) => {
-    setCart(cart.filter((_, i) => i !== index));
+    const updated = cart.filter((_, i) => i !== index);
+    setCart(updated);
+    localStorage.setItem('barkerscott-cart', JSON.stringify(updated));
   };
 
   const clearCart = () => {
