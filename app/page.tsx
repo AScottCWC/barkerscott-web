@@ -7,13 +7,8 @@ export default function HomePage() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const BUNDLES = [
-    { name: 'Care Home Starter', price: '£199.99', save: 'Save £70', items: '7 Templates', sector: 'care-homes', icon: '👴' },
-    { name: 'Dental Practice Pro', price: '£219.99', save: 'Save £80', items: '6 Templates', sector: 'dental', icon: '🦷', featured: true },
     { name: 'Aesthetic Clinic Complete', price: '£249.99', save: 'Save £80', items: '6 Templates', sector: 'aesthetic', icon: '✨' },
     { name: 'GP Surgery Essentials', price: '£219.99', save: 'Save £80', items: '6 Templates', sector: 'gp', icon: '⚕️' },
-    { name: 'Weight Loss Clinic Complete', price: '£209.99', save: 'Save £80', items: '6 Templates', sector: 'weight-loss', icon: '💪' },
-    { name: 'Virtual Clinic Package', price: '£209.99', save: 'Save £80', items: '6 Templates', sector: 'virtual-clinic', icon: '💻' },
-    { name: 'ADHD Clinic Essentials', price: '£229.99', save: 'Save £80', items: '6 Templates', sector: 'adhd', icon: '🧠' },
     { name: 'Private Healthcare Package', price: '£239.99', save: 'Save £80', items: '5 Templates', sector: 'private-health', icon: '🏥' },
   ];
 
@@ -219,38 +214,23 @@ export default function HomePage() {
             Each bundle includes 1 free policy + 1 free risk assessment worth £70-£80
           </p>
           <p style={{ textAlign: 'center', color: '#D4AF37', fontWeight: '600', marginBottom: '3rem', fontSize: '15px' }}>
-            💡 Pro tip: Buy a bundle and get 10% off subscription (£22.49/month for 3 months, then £24.99/month)
+            💡 Pro tip: Buy a bundle and get 10% off subscription (£31.49/month for 3 months, then £34.99/month)
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
             {BUNDLES.map((bundle, i) => (
               <div key={i} style={{
-                backgroundColor: bundle.featured ? '#0B1D3A' : '#f9f9f9',
-                color: bundle.featured ? '#fff' : '#333',
+                backgroundColor: '#f9f9f9',
+                color: '#333',
                 padding: '2rem',
                 borderRadius: '8px',
-                border: bundle.featured ? '2px solid #D4AF37' : '1px solid #e5e5e5',
+                border: '1px solid #e5e5e5',
                 position: 'relative',
                 display: 'flex',
                 flexDirection: 'column'
               }}>
-                {bundle.featured && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '-12px',
-                    left: '1rem',
-                    backgroundColor: '#D4AF37',
-                    color: '#0B1D3A',
-                    padding: '0.25rem 0.75rem',
-                    fontWeight: '700',
-                    fontSize: '12px',
-                    borderRadius: '2px'
-                  }}>
-                    ★ POPULAR
-                  </div>
-                )}
                 <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{bundle.icon}</div>
-                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '0.5rem', marginTop: bundle.featured ? '0.75rem' : 0 }}>{bundle.name}</h3>
+                <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '0.5rem', marginTop: 0 }}>{bundle.name}</h3>
                 <p style={{ fontSize: '14px', opacity: 0.9, marginBottom: '1rem' }}>{bundle.items}</p>
                 <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#D4AF37', marginBottom: '1rem' }}>{bundle.price}</div>
                 <p style={{ fontSize: '12px', fontWeight: '600', color: '#D4AF37', marginBottom: '1rem' }}>{bundle.save}</p>
@@ -285,7 +265,7 @@ export default function HomePage() {
             <span style={{ color: '#D4AF37' }}>Subscription is essential.</span>
           </h2>
           <p style={{ fontSize: '18px', color: '#d1d5db', marginBottom: '2rem', lineHeight: '1.6' }}>
-            For just <span style={{ fontSize: '24px', fontWeight: '700', color: '#D4AF37' }}>£24.99/month</span>, get regulatory updates automatically delivered, monthly compliance news, and priority support. When new guidance emerges, your templates update before you even know the law changed.
+            For just <span style={{ fontSize: '24px', fontWeight: '700', color: '#D4AF37' }}>£34.99/month</span>, get regulatory updates automatically delivered, monthly compliance news, and priority support. When new guidance emerges, your templates update before you even know the law changed.
           </p>
           <Link href="/subscription" style={{ textDecoration: 'none' }}>
             <button style={{
@@ -330,7 +310,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
               { q: 'How often do templates update with the subscription?', a: 'Every 3 months, we review regulations and update templates if needed. Plus you get monthly newsletters about CQC changes, healthcare law updates, and compliance trends.' },
-              { q: 'What if I buy a bundle but later want the subscription?', a: 'Easy. Just sign up at the Subscription page. And if you bought a bundle, you automatically get 10% off your first 3 months (£22.49/month instead of £24.99).' },
+              { q: 'What if I buy a bundle but later want the subscription?', a: 'Easy. Just sign up at the Subscription page. And if you bought a bundle, you automatically get 10% off your first 3 months (£31.49/month instead of £34.99).' },
               { q: 'Do I need CQC registration to use these?', a: 'These templates are designed for CQC-regulated organizations. If you\'re registered with or inspected by CQC, they\'re for you. They\'re also useful for any healthcare provider wanting professional compliance documentation.' },
               { q: 'What counts as a regulatory "update"?', a: 'New CQC guidance, changes to healthcare law, updated best practices, revised industry standards. Anything that could affect your compliance. You\'ll get an explanation of what changed and how it impacts your templates.' },
               { q: 'Can I cancel the subscription anytime?', a: 'Yes. No contracts, no penalties. Cancel whenever you want. Your templates remain yours to use forever.' },
