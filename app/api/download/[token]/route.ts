@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ token: string }> }
+  context: { params: Promise<{ token: string }> }
 ) {
-  const { token } = await params;
+  const { token } = await context.params;
 
   if (!token) {
     return NextResponse.json({ error: 'Token required' }, { status: 400 });
