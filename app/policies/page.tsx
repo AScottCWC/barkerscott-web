@@ -7,6 +7,45 @@ export default function PoliciesPage() {
   const [selectedSector, setSelectedSector] = useState<string>('aesthetic');
   const [selectedType, setSelectedType] = useState<'all' | 'policy' | 'ra'>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+
+  const handleCheckout = async (productId: string, productName: string, price: number, sector: string) => {
+    if (!email) {
+      alert('Please enter your email');
+      return;
+    }
+
+    setLoading(productId);
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId,
+          productName,
+          price,
+          sector,
+          customerEmail: email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || 'Checkout failed');
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      window.location.href = `https://checkout.stripe.com/pay/${data.sessionId}`;
+    } catch (error) {
+      alert('Checkout failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setLoading(null);
+    }
+  };
 
   const SECTORS = {
     aesthetic: {
@@ -14,7 +53,6 @@ export default function PoliciesPage() {
       icon: '✨',
       bundlePrice: 549.99,
       items: [
-        // Policies
         { id: 'aes-pol-001', name: 'Adverse Event Management Policy', price: 37.99, type: 'policy', desc: 'Handle complications from injectable treatments' },
         { id: 'aes-pol-002', name: 'Client Safeguarding Policy', price: 39.99, type: 'policy', desc: 'Protect vulnerable clients' },
         { id: 'aes-pol-003', name: 'Complaints Policy', price: 34.99, type: 'policy', desc: 'Handle patient complaints' },
@@ -25,7 +63,6 @@ export default function PoliciesPage() {
         { id: 'aes-pol-008', name: 'Practitioner Competency Policy', price: 37.99, type: 'policy', desc: 'Staff training & competency' },
         { id: 'aes-pol-009', name: 'Privacy Data Protection Policy', price: 36.99, type: 'policy', desc: 'GDPR compliance' },
         { id: 'aes-pol-010', name: 'Product Management Policy', price: 34.99, type: 'policy', desc: 'Drug & device management' },
-        // Risk Assessments
         { id: 'aes-ra-001', name: 'Botulinum Toxin Administration RA', price: 32.99, type: 'ra', desc: 'Risk assessment for Botox' },
         { id: 'aes-ra-002', name: 'Chemical Skin Peels RA', price: 29.99, type: 'ra', desc: 'Chemical peel risks' },
         { id: 'aes-ra-003', name: 'Cryotherapy Cryolipolysis RA', price: 31.99, type: 'ra', desc: 'Cryotherapy risks' },
@@ -81,19 +118,14 @@ export default function PoliciesPage() {
       icon: '🧠',
       bundlePrice: 429.99,
       items: [
-        { id: 'adhd-pol-001', name: 'ADHD Assessment Protocol', price: 36.99, type: 'policy', desc: 'Assessment documentation' },
-        { id: 'adhd-pol-002', name: 'Medication Management & Shared Care', price: 38.99, type: 'policy', desc: 'Shared care agreements' },
-        { id: 'adhd-pol-003', name: 'Safeguarding Children & Young People', price: 37.99, type: 'policy', desc: 'Child safeguarding' },
-        { id: 'adhd-pol-004', name: 'Consent & Capacity Assessment', price: 35.99, type: 'policy', desc: 'Consent procedures' },
-        { id: 'adhd-pol-005', name: 'Confidentiality & Data Protection', price: 36.99, type: 'policy', desc: 'Data protection' },
-        { id: 'adhd-pol-006', name: 'Complaints Handling', price: 34.99, type: 'policy', desc: 'Complaint procedures' },
-        { id: 'adhd-pol-007', name: 'Clinical Governance', price: 39.99, type: 'policy', desc: 'Clinical governance' },
-        { id: 'adhd-pol-008', name: 'Health & Safety', price: 33.99, type: 'policy', desc: 'Health & safety' },
-        { id: 'adhd-ra-001', name: 'Medication Safety & Prescribing RA', price: 32.99, type: 'ra', desc: 'Medication safety' },
-        { id: 'adhd-ra-002', name: 'Safeguarding Risk RA', price: 31.99, type: 'ra', desc: 'Safeguarding assessment' },
-        { id: 'adhd-ra-003', name: 'Assessment Validity RA', price: 29.99, type: 'ra', desc: 'Assessment validity' },
-        { id: 'adhd-ra-004', name: 'Data Protection RA', price: 28.99, type: 'ra', desc: 'Data security assessment' },
-        { id: 'adhd-ra-005', name: 'Patient Consent Capacity RA', price: 27.99, type: 'ra', desc: 'Consent assessment' },
+        { id: 'adh-pol-001', name: 'ADHD Assessment Protocol', price: 36.99, type: 'policy', desc: 'Assessment documentation' },
+        { id: 'adh-pol-002', name: 'Medication Management & Shared Care', price: 38.99, type: 'policy', desc: 'Shared care agreements' },
+        { id: 'adh-pol-003', name: 'Safeguarding Children & Young People', price: 37.99, type: 'policy', desc: 'Child safeguarding' },
+        { id: 'adh-pol-004', name: 'Consent & Capacity Assessment', price: 35.99, type: 'policy', desc: 'Consent procedures' },
+        { id: 'adh-pol-005', name: 'Confidentiality & Data Protection', price: 36.99, type: 'policy', desc: 'Data protection' },
+        { id: 'adh-ra-001', name: 'Medication Safety & Prescribing RA', price: 32.99, type: 'ra', desc: 'Medication safety' },
+        { id: 'adh-ra-002', name: 'Safeguarding Risk RA', price: 31.99, type: 'ra', desc: 'Safeguarding assessment' },
+        { id: 'adh-ra-003', name: 'Assessment Validity RA', price: 29.99, type: 'ra', desc: 'Assessment validity' },
       ]
     },
     weightloss: {
@@ -101,18 +133,13 @@ export default function PoliciesPage() {
       icon: '⚖️',
       bundlePrice: 559.99,
       items: [
-        { id: 'wl-pol-001', name: 'GLP-1 & Weight Loss Medication Prescribing', price: 38.99, type: 'policy', desc: 'GLP-1 prescribing protocol' },
-        { id: 'wl-pol-002', name: 'Cardiovascular Assessment & Monitoring', price: 37.99, type: 'policy', desc: 'CV monitoring' },
-        { id: 'wl-pol-003', name: 'Psychological Screening & Assessment', price: 36.99, type: 'policy', desc: 'Psychological assessment' },
-        { id: 'wl-pol-004', name: 'Informed Consent & Risk Disclosure', price: 35.99, type: 'policy', desc: 'Informed consent' },
-        { id: 'wl-pol-005', name: 'Safeguarding (Eating Disorders)', price: 37.99, type: 'policy', desc: 'ED safeguarding' },
-        { id: 'wl-pol-006', name: 'Data Protection & Confidentiality', price: 36.99, type: 'policy', desc: 'Data protection' },
-        { id: 'wl-pol-007', name: 'Complaints Handling', price: 34.99, type: 'policy', desc: 'Complaint procedures' },
-        { id: 'wl-pol-008', name: 'Clinical Governance', price: 39.99, type: 'policy', desc: 'Clinical governance' },
-        { id: 'wl-pol-009', name: 'Health & Safety at Work', price: 33.99, type: 'policy', desc: 'Health & safety' },
-        { id: 'wl-pol-010', name: 'Staff Training & Competency', price: 35.99, type: 'policy', desc: 'Staff training' },
-        { id: 'wl-ra-001', name: 'Cardiovascular Risk RA', price: 33.99, type: 'ra', desc: 'CV risk assessment' },
-        { id: 'wl-ra-002', name: 'Medication Safety (GLP-1) RA', price: 32.99, type: 'ra', desc: 'GLP-1 safety assessment' },
+        { id: 'wei-pol-001', name: 'GLP-1 & Weight Loss Medication Prescribing', price: 38.99, type: 'policy', desc: 'GLP-1 prescribing protocol' },
+        { id: 'wei-pol-002', name: 'Cardiovascular Assessment & Monitoring', price: 37.99, type: 'policy', desc: 'CV monitoring' },
+        { id: 'wei-pol-003', name: 'Psychological Screening & Assessment', price: 36.99, type: 'policy', desc: 'Psychological assessment' },
+        { id: 'wei-pol-004', name: 'Informed Consent & Risk Disclosure', price: 35.99, type: 'policy', desc: 'Informed consent' },
+        { id: 'wei-pol-005', name: 'Safeguarding (Eating Disorders)', price: 37.99, type: 'policy', desc: 'ED safeguarding' },
+        { id: 'wei-ra-001', name: 'Cardiovascular Risk RA', price: 33.99, type: 'ra', desc: 'CV risk assessment' },
+        { id: 'wei-ra-002', name: 'Medication Safety (GLP-1) RA', price: 32.99, type: 'ra', desc: 'GLP-1 safety assessment' },
       ]
     },
     telehealth: {
@@ -120,18 +147,14 @@ export default function PoliciesPage() {
       icon: '💻',
       bundlePrice: 559.99,
       items: [
-        { id: 'th-pol-001', name: 'Telehealth Consent & Patient Verification', price: 37.99, type: 'policy', desc: 'Remote consent procedures' },
-        { id: 'th-pol-002', name: 'Digital Security & Cybersecurity', price: 38.99, type: 'policy', desc: 'Cybersecurity policy' },
-        { id: 'th-pol-003', name: 'Remote Patient Assessment Protocol', price: 36.99, type: 'policy', desc: 'Remote assessment' },
-        { id: 'th-pol-004', name: 'Confidentiality & Data Protection (GDPR + Telehealth)', price: 37.99, type: 'policy', desc: 'Remote data protection' },
-        { id: 'th-pol-005', name: 'Emergency Response & Patient Escalation', price: 35.99, type: 'policy', desc: 'Emergency procedures' },
-        { id: 'th-pol-006', name: 'Prescribing via Telemedicine', price: 39.99, type: 'policy', desc: 'Remote prescribing' },
-        { id: 'th-pol-007', name: 'Clinical Governance (Remote Delivery)', price: 38.99, type: 'policy', desc: 'Remote governance' },
-        { id: 'th-pol-008', name: 'Service Continuity & Technology Failure', price: 36.99, type: 'policy', desc: 'Business continuity' },
-        { id: 'th-pol-009', name: 'Complaints Handling', price: 34.99, type: 'policy', desc: 'Complaint procedures' },
-        { id: 'th-pol-010', name: 'Health & Safety (Home-based)', price: 33.99, type: 'policy', desc: 'Remote H&S' },
-        { id: 'th-ra-001', name: 'Digital Access/Exclusion RA', price: 31.99, type: 'ra', desc: 'Digital access assessment' },
-        { id: 'th-ra-002', name: 'Cybersecurity & Data Breach RA', price: 32.99, type: 'ra', desc: 'Cyber risk assessment' },
+        { id: 'tel-pol-001', name: 'Telehealth Consent & Patient Verification', price: 37.99, type: 'policy', desc: 'Remote consent procedures' },
+        { id: 'tel-pol-002', name: 'Digital Security & Cybersecurity', price: 38.99, type: 'policy', desc: 'Cybersecurity policy' },
+        { id: 'tel-pol-003', name: 'Remote Patient Assessment Protocol', price: 36.99, type: 'policy', desc: 'Remote assessment' },
+        { id: 'tel-pol-004', name: 'Confidentiality & Data Protection (GDPR + Telehealth)', price: 37.99, type: 'policy', desc: 'Remote data protection' },
+        { id: 'tel-pol-005', name: 'Emergency Response & Patient Escalation', price: 35.99, type: 'policy', desc: 'Emergency procedures' },
+        { id: 'tel-pol-006', name: 'Prescribing via Telemedicine', price: 39.99, type: 'policy', desc: 'Remote prescribing' },
+        { id: 'tel-ra-001', name: 'Digital Access/Exclusion RA', price: 31.99, type: 'ra', desc: 'Digital access assessment' },
+        { id: 'tel-ra-002', name: 'Cybersecurity & Data Breach RA', price: 32.99, type: 'ra', desc: 'Cyber risk assessment' },
       ]
     }
   };
@@ -209,6 +232,27 @@ export default function PoliciesPage() {
       <section style={{ padding: '2rem 1.5rem', backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+            {/* EMAIL */}
+            <div>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#0B1D3A', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                Email (for downloads)
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #e5e5e5',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
             {/* SEARCH */}
             <div>
               <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', color: '#0B1D3A', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
@@ -254,17 +298,22 @@ export default function PoliciesPage() {
 
             {/* BUNDLE CTA */}
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <button style={{
-                backgroundColor: '#D4AF37',
-                color: '#0B1D3A',
-                padding: '0.75rem 1.5rem',
-                border: 'none',
-                borderRadius: '6px',
-                fontWeight: '700',
-                fontSize: '14px',
-                cursor: 'pointer'
-              }}>
-                🎁 Bundle All {current.items.length} for £{current.bundlePrice}
+              <button 
+                onClick={() => handleCheckout(`bundle-${selectedSector}`, `${current.name} Bundle`, current.bundlePrice, current.name)}
+                disabled={loading !== null || !email}
+                style={{
+                  backgroundColor: '#D4AF37',
+                  color: '#0B1D3A',
+                  padding: '0.75rem 1.5rem',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontWeight: '700',
+                  fontSize: '14px',
+                  cursor: loading !== null || !email ? 'not-allowed' : 'pointer',
+                  opacity: loading !== null || !email ? 0.5 : 1
+                }}
+              >
+                {loading === `bundle-${selectedSector}` ? '⏳ Processing...' : `🎁 Bundle All ${current.items.length} for £${current.bundlePrice}`}
               </button>
             </div>
           </div>
@@ -314,17 +363,22 @@ export default function PoliciesPage() {
                     <div style={{ fontSize: '18px', fontWeight: '700', color: '#D4AF37' }}>
                       £{item.price}
                     </div>
-                    <button style={{
-                      backgroundColor: 'transparent',
-                      color: '#D4AF37',
-                      border: '1px solid #D4AF37',
-                      padding: '0.5rem 1rem',
-                      borderRadius: '6px',
-                      fontWeight: '600',
-                      fontSize: '13px',
-                      cursor: 'pointer'
-                    }}>
-                      Add to Cart
+                    <button
+                      onClick={() => handleCheckout(item.id, item.name, item.price, current.name)}
+                      disabled={loading === item.id || !email}
+                      style={{
+                        backgroundColor: 'transparent',
+                        color: '#D4AF37',
+                        border: '1px solid #D4AF37',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '6px',
+                        fontWeight: '600',
+                        fontSize: '13px',
+                        cursor: loading === item.id || !email ? 'not-allowed' : 'pointer',
+                        opacity: loading === item.id || !email ? 0.5 : 1
+                      }}
+                    >
+                      {loading === item.id ? '⏳ Processing...' : 'Add to Cart'}
                     </button>
                   </div>
                 </div>
