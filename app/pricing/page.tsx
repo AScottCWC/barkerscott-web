@@ -96,7 +96,7 @@ export default function PricingPage() {
             </div>
             <div className="p-8">
               <div className="mb-8">
-                <span className="text-3xl font-bold text-slate-900">£319.96–£359.94</span>
+                <span className="text-3xl font-bold text-slate-900">£219.99–£249.99</span>
                 <p className="text-slate-600 mt-2">per sector, lifetime access</p>
               </div>
 
@@ -105,7 +105,7 @@ export default function PricingPage() {
                   <svg className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
-                  <span>9–10 documents per sector</span>
+                  <span>10 documents per sector</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
